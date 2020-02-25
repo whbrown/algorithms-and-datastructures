@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const selectionSort = (arr, options = { direction: 'ascending' }) => {
+    // TODO: change to work with strings
     const { direction } = options;
     for (let i = 0; i < arr.length; i++) {
         let [compNum, compIndex] = [arr[i], i]; // compNum/Index === min or max depending on @param direction

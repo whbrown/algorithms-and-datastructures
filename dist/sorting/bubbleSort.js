@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const bubbleSort = (arr, options = { direction: 'ascending' }) => {
+    // TODO: change to work with strings
     for (let i = arr.length - 1; i > 0; i--) {
         let hasSwapped = false;
         const { direction } = options;
