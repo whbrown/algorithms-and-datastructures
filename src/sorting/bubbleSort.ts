@@ -1,6 +1,7 @@
 import Options from './Options';
 
 const bubbleSort = <T extends number>(arr: T[], options: Options = { direction: 'ascending' }): T[] => {
+  // TODO: change to work with strings
   for (let i = arr.length - 1; i > 0; i--) {
     let hasSwapped = false;
     const { direction } = options;

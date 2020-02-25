@@ -1,7 +1,8 @@
 /* tslint:disable-next-line */ // ignore ts(1149)
 import Options from './Options';
 
-const selectionSort = <T extends number | string>(arr: T[], options: Options = { direction: 'ascending' }): T[] => {
+const selectionSort = <T extends number>(arr: T[], options: Options = { direction: 'ascending' }): T[] => {
+  // TODO: change to work with strings
   const { direction } = options;
   for (let i = 0; i < arr.length; i++) {
     let [compNum, compIndex] = [arr[i], i]; // compNum/Index === min or max depending on @param direction
