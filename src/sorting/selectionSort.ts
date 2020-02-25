@@ -1,5 +1,8 @@
-const selectionSort = <T extends number | string>(arr: T[], direction: 'ascending' | 'descending' = 'ascending'): T[] => {
-  // could refactor direction as a property on a secondary options object -- do this if it were an exposed API
+/* tslint:disable-next-line */ // ignore ts(1149)
+import Options from './Options';
+
+const selectionSort = <T extends number | string>(arr: T[], options: Options = { direction: 'ascending' }): T[] => {
+  const { direction } = options;
   for (let i = 0; i < arr.length; i++) {
     let [compNum, compIndex] = [arr[i], i]; // compNum/Index === min or max depending on @param direction
     for (let j = i; j < arr.length; j++) {

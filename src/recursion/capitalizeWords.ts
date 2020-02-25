@@ -1,4 +1,4 @@
-function capitalizeWords(words: string[] | []): (string[] | []) {
+export default function capitalizeWords(words: string[] | []): (string[] | []) {
   let newArray: string[] = [];
   if (!words.length) return newArray;
   newArray.push(words[0].toUpperCase());
@@ -7,5 +7,3 @@ function capitalizeWords(words: string[] | []): (string[] | []) {
 
 // let words = ['i', 'am', 'learning', 'recursion'];
 // console.log(capitalizeWords(words)); // ['I', 'AM', 'LEARNING', 'RECURSION']
-
-export default capitalizeWords;

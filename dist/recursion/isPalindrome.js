@@ -13,4 +13,3 @@ function isPalindrome(str) {
     return reverse.join("") === str;
 }
 exports.default = isPalindrome;
-isPalindrome("tacocat");

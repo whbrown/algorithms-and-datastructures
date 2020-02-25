@@ -22,4 +22,4 @@ export function capitalizeFirstPure(arr: any[]): string[] {
   }
   return capitalizedArray.concat(capitalizeFirstPure(arr));
 }
-console.log(capitalizeFirstPure(["car", "taco", "banana"]));
+// console.log(capitalizeFirstPure(["car", "taco", "banana"]));

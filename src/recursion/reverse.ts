@@ -8,4 +8,3 @@ export default function reverse(str: string): string {
   return helper(str);
 }
 
-console.log(reverse("test"));

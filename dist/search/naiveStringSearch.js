@@ -15,4 +15,3 @@ function naiveStringSearch(str, pattern) {
     return count;
 }
 exports.default = naiveStringSearch;
-console.log(naiveStringSearch("tatatat", "taaaaaaat"));

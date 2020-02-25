@@ -1,4 +1,4 @@
-function stringifyNumbers(obj: { [key: string]: any | { [key: string]: any } }): { [key: string]: any } {
+export default function stringifyNumbers(obj: { [key: string]: any | { [key: string]: any } }): { [key: string]: any } {
   let stringifiedObj: { [key: string]: any } = {};
   for (let key of Object.keys(obj)) {
     if (typeof obj[key] === 'number') {
@@ -14,18 +14,14 @@ function stringifyNumbers(obj: { [key: string]: any | { [key: string]: any } }):
   return stringifiedObj;
 }
 
-let obj = {
-  num: 1,
-  test: [],
-  data: {
-    val: 4,
-    info: {
-      isRight: true,
-      random: 66
-    }
-  }
-}
-
-console.log(stringifyNumbers(obj))
-
-export default stringifyNumbers;
+// let obj = {
+//   num: 1,
+//   test: [],
+//   data: {
+//     val: 4,
+//     info: {
+//       isRight: true,
+//       random: 66
+//     }
+//   }
+// }

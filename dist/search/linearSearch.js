@@ -9,4 +9,3 @@ function linearSearch(arr, val) {
     return -1;
 }
 exports.default = linearSearch;
-console.log(linearSearch([1, 4, 5], 5));

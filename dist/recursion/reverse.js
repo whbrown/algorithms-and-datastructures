@@ -11,4 +11,3 @@ function reverse(str) {
     return helper(str);
 }
 exports.default = reverse;
-console.log(reverse("test"));

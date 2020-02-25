@@ -6,4 +6,3 @@ function recursiveRange(num) {
     return num + recursiveRange(num - 1);
 }
 exports.default = recursiveRange;
-console.log(recursiveRange(10));

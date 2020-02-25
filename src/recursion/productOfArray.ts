@@ -4,4 +4,3 @@ export default function productOfArray(arr: number[]): number {
     return arr[0] * productOfArray(arr.slice(1));
   }
 }
-console.log(productOfArray([1, 2, 3]));

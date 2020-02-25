@@ -1,15 +1,16 @@
 "use strict";
-const obj1 = {
-    outer: 2,
-    obj: {
-        inner: 2,
-        otherObj: {
-            superInner: 2,
-            notANumber: true,
-            alsoNotANumber: "yup"
-        }
-    }
-};
+// const obj1 = {
+//   outer: 2,
+//   obj: {
+//     inner: 2,
+//     otherObj: {
+//       superInner: 2,
+//       notANumber: true,
+//       alsoNotANumber: "yup"
+//     }
+//   }
+// }
+Object.defineProperty(exports, "__esModule", { value: true });
 function nestedEvenSum(obj1) {
     let evenSum = 0;
     function recurse(obj1) {
@@ -26,4 +27,5 @@ function nestedEvenSum(obj1) {
     }
     return recurse(obj1);
 }
-console.log(nestedEvenSum(obj1));
+exports.default = nestedEvenSum;
+// console.log(nestedEvenSum(obj1));

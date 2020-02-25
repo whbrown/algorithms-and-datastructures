@@ -6,5 +6,3 @@ export default function linearSearch<T>(arr: T[], val: T): number {
   }
   return -1;
 }
-
-console.log(linearSearch([1, 4, 5], 5));

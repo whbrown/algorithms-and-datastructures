@@ -1,4 +1,4 @@
-function collectStrings(object: any): string[] {
+export default function collectStrings(object: any): string[] {
   let strArray: string[] = [];
   for (let key of Object.keys(object)) {
     if (typeof object[key] === 'string') {
@@ -10,22 +10,19 @@ function collectStrings(object: any): string[] {
   }
   return strArray;
 }
-
-const obj = {
-  stuff: "foo",
-  data: {
-    val: {
-      thing: {
-        info: "bar",
-        moreInfo: {
-          evenMoreInfo: {
-            weMadeIt: "baz"
-          }
-        }
-      }
-    }
-  }
-}
-
-
-console.log(collectStrings(obj));
+// test object:
+// const obj = {
+//   stuff: "foo",
+//   data: {
+//     val: {
+//       thing: {
+//         info: "bar",
+//         moreInfo: {
+//           evenMoreInfo: {
+//             weMadeIt: "baz"
+//           }
+//         }
+//       }
+//     }
+//   }
+// }

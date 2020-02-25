@@ -11,4 +11,3 @@ export default function flatten(arr: any[]): any[] {
   return flatArray;
 }
 
-console.log(flatten([[[1]], [[[2], 3], 4], 6, [5]]));

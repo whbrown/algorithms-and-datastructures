@@ -14,5 +14,5 @@ export default function someRecursive<T>(
   }
   return check(arr.slice(), cbfn);
 }
-const isOdd = (value: number): boolean => value % 2 !== 0;
-console.log(someRecursive([2, 4], isOdd));
+// const isOdd = (value: number): boolean => value % 2 !== 0;
+// console.log(someRecursive([2, 4], isOdd));

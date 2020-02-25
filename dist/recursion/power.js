@@ -6,4 +6,3 @@ function power(base, exponent) {
     return base * power(base, exponent - 1);
 }
 exports.default = power;
-console.log(power(2, 4));

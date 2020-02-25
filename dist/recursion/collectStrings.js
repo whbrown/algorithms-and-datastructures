@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function collectStrings(object) {
     let strArray = [];
     for (let key of Object.keys(object)) {
@@ -11,19 +12,20 @@ function collectStrings(object) {
     }
     return strArray;
 }
-const obj = {
-    stuff: "foo",
-    data: {
-        val: {
-            thing: {
-                info: "bar",
-                moreInfo: {
-                    evenMoreInfo: {
-                        weMadeIt: "baz"
-                    }
-                }
-            }
-        }
-    }
-};
-console.log(collectStrings(obj));
+exports.default = collectStrings;
+// test object:
+// const obj = {
+//   stuff: "foo",
+//   data: {
+//     val: {
+//       thing: {
+//         info: "bar",
+//         moreInfo: {
+//           evenMoreInfo: {
+//             weMadeIt: "baz"
+//           }
+//         }
+//       }
+//     }
+//   }
+// }

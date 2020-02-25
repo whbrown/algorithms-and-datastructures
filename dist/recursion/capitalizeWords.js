@@ -7,6 +7,6 @@ function capitalizeWords(words) {
     newArray.push(words[0].toUpperCase());
     return newArray.concat(capitalizeWords(words.slice(1)));
 }
+exports.default = capitalizeWords;
 // let words = ['i', 'am', 'learning', 'recursion'];
 // console.log(capitalizeWords(words)); // ['I', 'AM', 'LEARNING', 'RECURSION']
-exports.default = capitalizeWords;

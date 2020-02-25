@@ -12,5 +12,3 @@ export default function naiveStringSearch(
   }
   return count;
 }
-
-console.log(naiveStringSearch("tatatat", "taaaaaaat"));

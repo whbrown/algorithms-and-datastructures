@@ -14,4 +14,3 @@ function flatten(arr) {
     return flatArray;
 }
 exports.default = flatten;
-console.log(flatten([[[1]], [[[2], 3], 4], 6, [5]]));

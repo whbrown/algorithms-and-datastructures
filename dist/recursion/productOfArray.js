@@ -8,4 +8,3 @@ function productOfArray(arr) {
     }
 }
 exports.default = productOfArray;
-console.log(productOfArray([1, 2, 3]));

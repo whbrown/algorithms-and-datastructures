@@ -8,4 +8,3 @@ function factorial(num) {
     return num * factorial(num - 1);
 }
 exports.default = factorial;
-console.log(factorial(5));

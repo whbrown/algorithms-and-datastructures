@@ -1,19 +1,19 @@
-const obj1 = {
-  outer: 2,
-  obj: {
-    inner: 2,
-    otherObj: {
-      superInner: 2,
-      notANumber: true,
-      alsoNotANumber: "yup"
-    }
-  }
-}
+// const obj1 = {
+//   outer: 2,
+//   obj: {
+//     inner: 2,
+//     otherObj: {
+//       superInner: 2,
+//       notANumber: true,
+//       alsoNotANumber: "yup"
+//     }
+//   }
+// }
 
 interface UnknownNestedObject {
   [index: string]: any
 }
-function nestedEvenSum(obj1: UnknownNestedObject) {
+export default function nestedEvenSum(obj1: UnknownNestedObject) {
   let evenSum = 0;
   function recurse(obj1: UnknownNestedObject) {
     let keys = Object.keys(obj1);
@@ -29,5 +29,4 @@ function nestedEvenSum(obj1: UnknownNestedObject) {
   }
   return recurse(obj1);
 }
-
-console.log(nestedEvenSum(obj1));
+// console.log(nestedEvenSum(obj1));

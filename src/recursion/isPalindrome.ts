@@ -8,5 +8,3 @@ export default function isPalindrome(str: string): boolean {
   if (str.length !== reverse.length) append(str);
   return reverse.join("") === str;
 }
-
-isPalindrome("tacocat");
