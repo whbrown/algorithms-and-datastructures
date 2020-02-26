@@ -25,3 +25,4 @@ exports.naiveStringSearch = search_1.naiveStringSearch;
 const sorting_1 = require("./sorting");
 exports.bubbleSort = sorting_1.bubbleSort;
 exports.selectionSort = sorting_1.selectionSort;
+exports.insertionSort = sorting_1.insertionSort;

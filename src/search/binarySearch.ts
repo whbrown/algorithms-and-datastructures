@@ -1,7 +1,7 @@
 export default function binarySearch<T extends string | number>(
   arr: T[], // array must be sorted!
   val: T
-): number | boolean {
+): number {
   // Binary search algorithm, returns index of value if found, -1 if not.
   let left = 0;
   let right = arr.length - 1;

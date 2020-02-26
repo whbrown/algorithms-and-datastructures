@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 function binarySearch(arr, // array must be sorted!
 val) {
+    // Binary search algorithm, returns index of value if found, -1 if not.
     let left = 0;
     let right = arr.length - 1;
     if (val > arr[right] || val < arr[left])

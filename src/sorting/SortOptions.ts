@@ -1,3 +1,3 @@
-export default interface Options {
+export default interface SortOptions {
   direction: 'ascending' | 'descending';
 }

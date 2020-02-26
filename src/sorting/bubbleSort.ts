@@ -1,6 +1,7 @@
-import Options from './Options';
+import SortOptions from './SortOptions';
+import swap from './swap';
 
-const bubbleSort = <T extends number>(arr: T[], options: Options = { direction: 'ascending' }): T[] => {
+const bubbleSort = <T extends number>(arr: T[], options: SortOptions = { direction: 'ascending' }): T[] => {
   // TODO: change to work with strings
   for (let i = arr.length - 1; i > 0; i--) {
     let hasSwapped = false;
@@ -9,7 +10,7 @@ const bubbleSort = <T extends number>(arr: T[], options: Options = { direction: 
       let a = arr[j];
       let b = arr[j + 1];
       if (direction === 'ascending' && a > b || direction === 'descending' && a < b) {
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+        swap(arr, j, j + 1)
         hasSwapped = true;
       }
     }
@@ -20,6 +21,6 @@ const bubbleSort = <T extends number>(arr: T[], options: Options = { direction: 
   return arr;
 }
 
-// let arr = [1, 5, 3, 4, 7, 9];
-
+let arr = [1, 5, 3, 4, 7, 9];
+console.log(bubbleSort(arr))
 export default bubbleSort;

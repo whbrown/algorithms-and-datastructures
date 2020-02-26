@@ -7,3 +7,5 @@ const bubbleSort_1 = __importDefault(require("./bubbleSort"));
 exports.bubbleSort = bubbleSort_1.default;
 const selectionSort_1 = __importDefault(require("./selectionSort"));
 exports.selectionSort = selectionSort_1.default;
+const insertionSort_1 = __importDefault(require("./insertionSort"));
+exports.insertionSort = insertionSort_1.default;

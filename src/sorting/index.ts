@@ -1,3 +1,4 @@
 import bubbleSort from './bubbleSort';
 import selectionSort from './selectionSort';
-export { bubbleSort, selectionSort };
+import insertionSort from './insertionSort';
+export { bubbleSort, selectionSort, insertionSort };
