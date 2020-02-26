@@ -26,3 +26,5 @@ const sorting_1 = require("./sorting");
 exports.bubbleSort = sorting_1.bubbleSort;
 exports.selectionSort = sorting_1.selectionSort;
 exports.insertionSort = sorting_1.insertionSort;
+exports.merge = sorting_1.merge;
+exports.mergeSort = sorting_1.mergeSort;

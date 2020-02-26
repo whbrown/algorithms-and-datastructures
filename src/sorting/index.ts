@@ -1,4 +1,7 @@
 import bubbleSort from './bubbleSort';
 import selectionSort from './selectionSort';
 import insertionSort from './insertionSort';
-export { bubbleSort, selectionSort, insertionSort };
+import merge from './merge';
+import mergeSort from './mergeSort';
+
+export { bubbleSort, selectionSort, insertionSort, merge, mergeSort };

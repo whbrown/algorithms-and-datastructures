@@ -9,3 +9,7 @@ const selectionSort_1 = __importDefault(require("./selectionSort"));
 exports.selectionSort = selectionSort_1.default;
 const insertionSort_1 = __importDefault(require("./insertionSort"));
 exports.insertionSort = insertionSort_1.default;
+const merge_1 = __importDefault(require("./merge"));
+exports.merge = merge_1.default;
+const mergeSort_1 = __importDefault(require("./mergeSort"));
+exports.mergeSort = mergeSort_1.default;
