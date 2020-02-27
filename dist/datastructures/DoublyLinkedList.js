@@ -15,20 +15,21 @@ const SinglyLinkedList_1 = __importDefault(require("./SinglyLinkedList"));
 class DoublyLinkedList extends SinglyLinkedList_1.default {
     constructor() {
         super();
-        this.push = (node) => {
-            if (this.tail) {
-                node.prev = this.tail;
+        this.push = (value) => {
+            const oldTail = this.tail;
+            const node = super.push(value);
+            if (oldTail) {
+                node.prev = oldTail;
             }
-            super.push(node);
             return node;
         };
         this.pop = () => {
-            // returns deleted item, O(1) time
+            // returns deleted item, O(1) time, unlike SinglyLinkedList's O(n) pop
             if (!this.tail)
                 return null;
             const oldTail = this.tail;
-            if (this.tail.prev) {
-                this.tail = this.tail.prev;
+            if (oldTail.prev) {
+                this.tail = oldTail.prev;
                 this.tail.next = null;
             }
             else {
@@ -36,30 +37,33 @@ class DoublyLinkedList extends SinglyLinkedList_1.default {
                 this.head = null;
                 this.tail = null;
             }
+            oldTail.prev = null;
             this._length--;
             return oldTail;
         };
-        this.shift = (node) => {
-            if (this.head) {
-                this.head.prev = node;
+        this.unshift = (value) => {
+            let oldHead = this.head;
+            let node = super.unshift(value);
+            if (oldHead) {
+                oldHead.prev = node;
             }
-            return super.shift(node);
+            node.prev = null;
+            return node;
         };
-        this.unshift = () => {
+        this.shift = () => {
             if (this.head && this.head.next) {
                 // set new head's prev to null
                 this.head.next.prev = null;
             }
-            return super.unshift();
+            return super.shift();
         };
     }
     ;
 }
 ;
+const doubleList = new DoublyLinkedList();
+doubleList.push(5);
+console.log(doubleList);
+console.log(doubleList.shift());
+console.log(doubleList);
 exports.default = DoublyLinkedList;
-// const doubleList = new DoublyLinkedList();
-// doubleList.push(new DoublyLinkedNode('test'))
-// doubleList.push(new DoublyLinkedNode('additional test'))
-// doubleList.shift(new DoublyLinkedNode('yet another additional test'));
-// doubleList.pop();
-// console.log(doubleList);

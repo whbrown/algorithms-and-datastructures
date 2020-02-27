@@ -15,4 +15,4 @@ function maxSubArraySum(array, windowSize) {
     return maxSum;
 }
 exports.default = maxSubArraySum;
-console.log(maxSubArraySum([2, 6, 9, 2, 1, 8, 5, 6, 2], 3));
+// console.log(maxSubArraySum([2, 6, 9, 2, 1, 8, 5, 6, 2], 3));

@@ -1,5 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const Node_1 = __importDefault(require("./Node"));
 class SinglyLinkedList {
     constructor() {
         this._length = 0;
@@ -19,7 +23,8 @@ class SinglyLinkedList {
     get length() {
         return this._length;
     }
-    push(node) {
+    push(value) {
+        const node = new Node_1.default(value);
         // add node to end of list
         // O(1) since we keep track of tail node
         if (!this.head || !this.tail) {
@@ -34,10 +39,10 @@ class SinglyLinkedList {
     }
     pop() {
         // remove last node from list
-        // O(n) time since we have to iterate over the whole list to find the new tail, and in particular to point the second to last node's next prop to that new tail.
+        // O(n) time since we have to iterate over the whole list to find the new tail, and make the new tail's next point to null.
         if (!this.head)
             return null;
-        let node = this.head;
+        const node = this.head;
         if (!node.next) {
             this.head = null;
             this.tail = null;
@@ -56,22 +61,28 @@ class SinglyLinkedList {
             return childNode;
         }
     }
-    shift(node) {
+    unshift(value) {
         // add node as first of list
         // O(1)
+        const node = new Node_1.default(value);
+        if (!this.length)
+            this.tail = node;
         node.next = this.head;
         this.head = node;
         this._length++;
         return this.head;
     }
-    unshift() {
+    shift() {
         // remove first node from list
         // O(1)
         if (!this.head)
             return null;
         const newHead = this.head.next;
         const oldHead = this.head;
+        oldHead.next = null;
         this.head = newHead || null;
+        if (this.length === 1)
+            this.tail = null;
         this._length--;
         return oldHead;
     }

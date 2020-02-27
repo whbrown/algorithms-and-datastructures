@@ -11,11 +11,11 @@ import { binarySearch, linearSearch, naiveStringSearch } from './search';
 import { bubbleSort, selectionSort, insertionSort, merge, mergeSort } from './sorting';
 
 // datastructures
-import { _Node, DoublyLinkedNode, SinglyLinkedList, DoublyLinkedList } from './datastructures';
+import { _Node, SinglyLinkedList, DoublyLinkedList } from './datastructures';
 
 export {
   capitalizeFirst, capitalizeWords, collectStrings, factorial, fibonacci, flatten, isPalindrome,
   nestedEvenSum, power, productOfArray, recursiveRange, reverse, someRecursive, stringifyNumbers,
   binarySearch, linearSearch, naiveStringSearch, bubbleSort, selectionSort, insertionSort, merge,
-  mergeSort, _Node, DoublyLinkedNode, SinglyLinkedList, DoublyLinkedList
+  mergeSort, _Node, SinglyLinkedList, DoublyLinkedList
 };

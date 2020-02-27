@@ -7,11 +7,4 @@ class _Node {
         this.next = null;
     }
 }
-class DoublyLinkedNode extends _Node {
-    constructor(data) {
-        super(data);
-        this.prev = null;
-    }
-}
-exports.DoublyLinkedNode = DoublyLinkedNode;
 exports.default = _Node;

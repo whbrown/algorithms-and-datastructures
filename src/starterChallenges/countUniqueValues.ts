@@ -11,7 +11,7 @@ export default function countUniqueValues(array: number[]): number {
   }
   return uniqueNums;
 }
-console.log(countUniqueValues([-2, -1, -1, 0, 1]));
+// console.log(countUniqueValues([-2, -1, -1, 0, 1]));
 
 // sneaky declarative solution using a set, also O(n) time complexity, space complexity is O(n)
 // const countUniqueValues(array: number[]): number {

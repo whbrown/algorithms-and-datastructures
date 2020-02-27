@@ -24,4 +24,4 @@ export default function frequencyCounter(
   // would be better to iterate over Object.keys(frequencies1) with .every(...etc) to check if values of each object for each prop are the same
 }
 
-console.log(frequencyCounter([1, 2, 3], [4, 1, 9]));
+// console.log(frequencyCounter([1, 2, 3], [4, 1, 9]));

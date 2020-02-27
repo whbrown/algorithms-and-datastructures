@@ -18,5 +18,5 @@ const isAnagram = (word1: string, word2: string): boolean => {
     return frequencies1[char] === frequencies2[char];
   });
 };
-console.log(isAnagram("rat", "car"));
+// console.log(isAnagram("rat", "car"));
 export default isAnagram;
