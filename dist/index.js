@@ -31,4 +31,6 @@ exports.mergeSort = sorting_1.mergeSort;
 // datastructures
 const datastructures_1 = require("./datastructures");
 exports._Node = datastructures_1._Node;
+exports.DoublyLinkedNode = datastructures_1.DoublyLinkedNode;
 exports.SinglyLinkedList = datastructures_1.SinglyLinkedList;
+exports.DoublyLinkedList = datastructures_1.DoublyLinkedList;

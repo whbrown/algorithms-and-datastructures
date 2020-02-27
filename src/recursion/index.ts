@@ -13,4 +13,7 @@ import reverse from './reverse';
 import someRecursive from './someRecursive';
 import stringifyNumbers from './stringifyNumbers';
 
-export { capitalizeFirst, capitalizeWords, collectStrings, factorial, fibonacci, flatten, isPalindrome, nestedEvenSum, power, productOfArray, recursiveRange, reverse, someRecursive, stringifyNumbers };
+export {
+  capitalizeFirst, capitalizeWords, collectStrings, factorial, fibonacci, flatten, isPalindrome,
+  nestedEvenSum, power, productOfArray, recursiveRange, reverse, someRecursive, stringifyNumbers
+};

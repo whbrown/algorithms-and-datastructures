@@ -9,7 +9,8 @@ const mergeSort = (arr, options = { direction: 'ascending' }) => {
         return arr; /* base case. return the single number array which will return first
      merge() with the other (left/right) and those 2 will return merge with the other (left/right) and on down the
      call stack as each layer gets popped off (the original root call is sitting on `const right = ...` waiting to
-     get the the stackframes piled on top of it done to proceed to final return). this function is, excluding the merge calls, O(log(n)), so combining the two is O(nlog(n)) */
+     get the the stackframes piled on top of it done to proceed to final return). this function is, excluding the
+     merge calls, O(log(n)), so combining the two is O(nlog(n)) */
     const { direction } = options;
     const left = mergeSort(arr.slice(0, Math.floor(arr.length / 2)), { direction });
     const right = mergeSort(arr.slice(Math.floor(arr.length / 2)), { direction });

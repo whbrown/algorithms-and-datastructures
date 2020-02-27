@@ -3,7 +3,6 @@ import SortOptions from './SortOptions';
 const merge = <T>(arr1: T[], arr2: T[], options: SortOptions = { direction: 'ascending' }): T[] => {
   // O(n+m) time
   // Takes two sorted arrays and merges them into one.
-  // TODO: should instead infer ascending vs descending by peeking at the first two values of one of the arrays
   let newArr: T[] = [];
   let arr1Index: number = 0;
   let arr2Index: number = 0;

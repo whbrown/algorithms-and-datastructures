@@ -2,61 +2,79 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class SinglyLinkedList {
     constructor() {
-        this.push = (node) => {
-            // add node to end of list
-            if (!this.head || !this.tail) {
-                this.head = node;
-            }
-            else {
-                this.tail.next = node;
-            }
-            this.tail = node;
-            this.length++;
-            return this.tail;
-        };
-        this.pop = () => {
-            // remove last node from list
-            // O(n) time since we have to iterate over the whole list to find the new tail
-            if (!this.head)
-                return null;
-            let node = this.head;
-            if (!node.next) {
-                this.head = null;
-                this.tail = null;
-                this.length--;
-                return node;
-            }
-            else {
-                let childNode = node.next;
-                while (childNode.next !== null) {
-                    childNode = childNode.next;
-                }
-                node.next = null;
-                this.tail = node;
-                this.length--;
-                return childNode;
-            }
-        };
-        this.shift = (node) => {
-            // add node as first of list
-            this.length++;
-            node.next = this.head;
-            this.head = node;
-            return this.head;
-        };
-        this.unshift = () => {
-            // remove first node from list
-            if (!this.head)
-                return null;
-            const nextHead = this.head.next;
-            const oldHead = this.head;
-            this.head = nextHead || null;
-            this.length--;
-            return oldHead;
-        };
+        this._length = 0;
         this.head = null;
         this.tail = null;
-        this.length = 0;
+        // don't like how Object.keys(new SinglyLinkedList) shows `_length` but not the public setter `length`
+        // there should be a way to fix this?
+        // ? maybe make length a public getter with a private setter so that it's readonly outside
+        // ? the class, but modifiable inside by the other methods?
+        // when implemented, tsc error: Getter and setter accessors do not agree in visibility.ts(2379)
+        // typescript doesn't support this, 
+        // see https://github.com/microsoft/TypeScript/issues/2845
+        // design meeting notes: https://github.com/microsoft/TypeScript/issues/6735
+        // instead, i'm using a slightly uglier work around where there is no setter,
+        // but the prop itself is private, giving the same functionality.
+    }
+    get length() {
+        return this._length;
+    }
+    push(node) {
+        // add node to end of list
+        // O(1) since we keep track of tail node
+        if (!this.head || !this.tail) {
+            this.head = node;
+        }
+        else {
+            this.tail.next = node;
+        }
+        this.tail = node;
+        this._length++;
+        return this.tail;
+    }
+    pop() {
+        // remove last node from list
+        // O(n) time since we have to iterate over the whole list to find the new tail, and in particular to point the second to last node's next prop to that new tail.
+        if (!this.head)
+            return null;
+        let node = this.head;
+        if (!node.next) {
+            this.head = null;
+            this.tail = null;
+            this._length--;
+            return node;
+        }
+        else {
+            let childNode = node.next;
+            while (childNode.next !== null) {
+                // list traversal
+                childNode = childNode.next;
+            }
+            node.next = null;
+            this.tail = node;
+            this._length--;
+            return childNode;
+        }
+    }
+    shift(node) {
+        // add node as first of list
+        // O(1)
+        node.next = this.head;
+        this.head = node;
+        this._length++;
+        return this.head;
+    }
+    unshift() {
+        // remove first node from list
+        // O(1)
+        if (!this.head)
+            return null;
+        const newHead = this.head.next;
+        const oldHead = this.head;
+        this.head = newHead || null;
+        this._length--;
+        return oldHead;
     }
 }
+// const list = new SinglyLinkedList();
 exports.default = SinglyLinkedList;
