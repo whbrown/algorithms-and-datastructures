@@ -7,4 +7,7 @@ import { binarySearch, linearSearch, naiveStringSearch } from './search';
 // sorting
 import { bubbleSort, selectionSort, insertionSort, merge, mergeSort } from './sorting';
 
-export { capitalizeFirst, capitalizeWords, collectStrings, factorial, fibonacci, flatten, isPalindrome, nestedEvenSum, power, productOfArray, recursiveRange, reverse, someRecursive, stringifyNumbers, binarySearch, linearSearch, naiveStringSearch, bubbleSort, selectionSort, insertionSort, merge, mergeSort };
+// datastructures
+import { _Node, SinglyLinkedList } from './datastructures';
+
+export { capitalizeFirst, capitalizeWords, collectStrings, factorial, fibonacci, flatten, isPalindrome, nestedEvenSum, power, productOfArray, recursiveRange, reverse, someRecursive, stringifyNumbers, binarySearch, linearSearch, naiveStringSearch, bubbleSort, selectionSort, insertionSort, merge, mergeSort, _Node, SinglyLinkedList };

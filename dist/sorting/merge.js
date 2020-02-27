@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const merge = (arr1, arr2, options = { direction: 'ascending' }) => {
+    // O(n+m) time
     // Takes two sorted arrays and merges them into one.
     // TODO: should instead infer ascending vs descending by peeking at the first two values of one of the arrays
     let newArr = [];

@@ -28,3 +28,7 @@ exports.selectionSort = sorting_1.selectionSort;
 exports.insertionSort = sorting_1.insertionSort;
 exports.merge = sorting_1.merge;
 exports.mergeSort = sorting_1.mergeSort;
+// datastructures
+const datastructures_1 = require("./datastructures");
+exports._Node = datastructures_1._Node;
+exports.SinglyLinkedList = datastructures_1.SinglyLinkedList;
