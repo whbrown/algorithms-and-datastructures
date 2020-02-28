@@ -9,14 +9,10 @@ function testTraverseSLL(list) {
         return true; // empty list
     let node = list.head;
     let countedLength = 1;
-    while (node) {
+    while (node.next) {
         // console.log(node.data)
-        if (node.next) {
-            node = node.next;
-            countedLength++;
-        }
-        else
-            break;
+        node = node.next;
+        countedLength++;
     }
     return (node === list.tail && countedLength === list.length);
 }
@@ -73,9 +69,13 @@ test(`Able to traverse a list mutated by pushes, pops, shifts, unshifts, inserts
         if (i % 7 === 0) {
             list.shift();
         }
+        if (i === 1)
+            list.insert(`insert: ${i}`);
         if (i % 9 === 0) {
             list.insert(`insert: ${i}`, Math.floor(Math.random() * list.length));
         }
+        if (i === 20)
+            list.removeIndex(list.length - 1);
         if (i % 11 === 0) {
             list.removeIndex(Math.floor(Math.random() * list.length));
         }

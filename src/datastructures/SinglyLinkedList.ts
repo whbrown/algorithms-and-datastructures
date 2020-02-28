@@ -107,7 +107,7 @@ class SinglyLinkedList<T> {
   }
 
   get(index: number): _Node<T> | null {
-    if (!this.head || (index > this.length || index < 0)) throw new IndexError;
+    if (!this.head || (index > this.length - 1 || index < 0)) throw new IndexError('list index out of range.');
     let counter = 0;
     let node = this.head;
     while (counter < index) {
@@ -128,7 +128,7 @@ class SinglyLinkedList<T> {
 
   insert(value: T, index?: number, options: ListMethodOptions = { prevEnabled: false }): _Node<T> | null {
     if (!index) return this.push(value);
-    if (index > this.length || index < 0) throw new IndexError;
+    if (index > this.length - 1 || index < 0) throw new IndexError('list index out of range.');
     if (index === 0) return this.unshift(value);
     if (index === this.length) return this.push(value);
     const { prevEnabled } = options;
@@ -147,7 +147,7 @@ class SinglyLinkedList<T> {
   }
 
   removeIndex(index: number, options: ListMethodOptions = { prevEnabled: false }): _Node<T> | void {
-    if (index > this.length || index < 0) throw new IndexError;
+    if (index > this.length - 1 || index < 0) throw new IndexError('list index out of range.');
     if (index === 0) return this.shift();
     if (index === this.length - 1) return this.pop();
 
@@ -166,7 +166,7 @@ class SinglyLinkedList<T> {
   }
   log(beginning: number = 0, end: number = this.length - 1) {
     if ((beginning > this.length - 1 || beginning < 0)
-      || (end > this.length - 1 || end < 0)) throw new IndexError;
+      || (end > this.length - 1 || end < 0)) throw new IndexError('list index out of range.');
     let node = this.get(beginning);
     let count = beginning;
     while (node) {
@@ -179,7 +179,7 @@ class SinglyLinkedList<T> {
   }
   toString(beginning: number = 0, end: number = this.length - 1) {
     if ((beginning > this.length - 1 || beginning < 0)
-      || (end > this.length - 1 || end < 0)) throw new IndexError;
+      || (end > this.length - 1 || end < 0)) throw new IndexError('list index out of range.');
     let node = this.get(beginning);
     while (node) {
       console.log(node.data)

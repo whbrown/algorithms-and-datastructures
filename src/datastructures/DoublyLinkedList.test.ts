@@ -6,12 +6,10 @@ export function testTraversalDLL<T>(list: DoublyLinkedList<T>): boolean {
   if (!list.tail) return true; // empty list
   let node = list.tail!;
   let countedLength = 1;
-  while (node) {
+  while (node.prev) {
     // console.log(node.data)
-    if (node.prev) {
-      node = node.prev;
-      countedLength++;
-    } else break;
+    node = node.prev;
+    countedLength++;
   }
   return (node === list.head && countedLength === list.length);
 }
@@ -75,11 +73,13 @@ test(`Able to traverse a list mutated by pushes, pops, shifts, unshifts, inserts
     if (i % 7 === 0) {
       list.shift();
     }
+    if (i === 1) list.insert(`insert: ${i}`);
     if (i % 9 === 0) {
       list.insert(`insert: ${i}`, Math.floor(Math.random() * list.length));
     }
+    if (i === 20) list.removeIndex(list.length - 1);
     if (i % 11 === 0) {
-      list.removeIndex(Math.floor(Math.random() * list.length));
+      list.removeIndex(Math.floor(Math.random() * list.length - 1));
     }
   }
   expect(testTraverseSLL(list)).toBe(true);

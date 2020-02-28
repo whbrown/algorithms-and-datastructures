@@ -65,7 +65,7 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
     }
   }
 
-  insert = (value: T, index: number) => {
+  insert = (value: T, index?: number) => {
     if (index === 0) return this.unshift(value); // uses the doublylinkedlist's unshift/push/shift/pop as
     if (index === this.length) return this.push(value); // they already cover logic for dealing with prev
     return super.insert(value, index, { prevEnabled: true });

@@ -96,8 +96,8 @@ class SinglyLinkedList {
         return oldHead;
     }
     get(index) {
-        if (!this.head || (index > this.length || index < 0))
-            throw new IndexError_1.default;
+        if (!this.head || (index > this.length - 1 || index < 0))
+            throw new IndexError_1.default('list index out of range.');
         let counter = 0;
         let node = this.head;
         while (counter < index) {
@@ -118,8 +118,8 @@ class SinglyLinkedList {
     insert(value, index, options = { prevEnabled: false }) {
         if (!index)
             return this.push(value);
-        if (index > this.length || index < 0)
-            throw new IndexError_1.default;
+        if (index > this.length - 1 || index < 0)
+            throw new IndexError_1.default('list index out of range.');
         if (index === 0)
             return this.unshift(value);
         if (index === this.length)
@@ -139,8 +139,8 @@ class SinglyLinkedList {
         return newNode;
     }
     removeIndex(index, options = { prevEnabled: false }) {
-        if (index > this.length || index < 0)
-            throw new IndexError_1.default;
+        if (index > this.length - 1 || index < 0)
+            throw new IndexError_1.default('list index out of range.');
         if (index === 0)
             return this.shift();
         if (index === this.length - 1)
@@ -161,7 +161,7 @@ class SinglyLinkedList {
     log(beginning = 0, end = this.length - 1) {
         if ((beginning > this.length - 1 || beginning < 0)
             || (end > this.length - 1 || end < 0))
-            throw new IndexError_1.default;
+            throw new IndexError_1.default('list index out of range.');
         let node = this.get(beginning);
         let count = beginning;
         while (node) {
@@ -177,7 +177,7 @@ class SinglyLinkedList {
     toString(beginning = 0, end = this.length - 1) {
         if ((beginning > this.length - 1 || beginning < 0)
             || (end > this.length - 1 || end < 0))
-            throw new IndexError_1.default;
+            throw new IndexError_1.default('list index out of range.');
         let node = this.get(beginning);
         while (node) {
             console.log(node.data);
