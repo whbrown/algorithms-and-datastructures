@@ -42,16 +42,17 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 
   shift = (): _Node<T> | null => {
     if (this.head && this.head.next) {
-      // set new head's prev to null
       this.head.next.prev = null;
     }
     return super.shift();
   }
   get = (index: number): _Node<T> | null => {
     if (index < (this.length / 2)) {
+      // start at head
       return super.get(index);
     }
     else {
+      // count backwards from tail
       if (!this.tail || (index > this.length - 1 || index < 0)) return null;
       let counter = this.length - 1;
       let node = this.tail;
@@ -64,8 +65,25 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
     }
   }
 
-  insert = (value: T, index: number) => super.insert(value, index, { prevEnabled: true });
+  insert = (value: T, index: number) => {
+    if (index === 0) return this.unshift(value);
+    if (index === this.length) return this.push(value);
+    return super.insert(value, index, { prevEnabled: true });
+  };
 };
 
-export default DoublyLinkedList;
 
+const list = new DoublyLinkedList();
+list.push('Ron');
+list.push('Harry');
+list.push('Hermione');
+list.insert('Hagrid', 3);
+let node = list.head;
+for (let i = 0; i < list.length; i++) {
+  console.log(node);
+  if (node) {
+    node = node.next;
+  }
+}
+
+export default DoublyLinkedList;
