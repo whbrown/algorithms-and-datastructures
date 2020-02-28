@@ -1,15 +1,6 @@
 import _Node from "./Node";
 import SinglyLinkedList from './SinglyLinkedList';
 
-// interface DoublyLinkedList<T> extends SinglyLinkedList<T> {
-//   head: null | _Node<T>;
-//   tail: null | _Node<T>;
-//   push: (node: _Node<T>) => _Node<T>;
-//   pop: () => _Node<T> | null;
-//   shift: (node: _Node<T>) => _Node<T>;
-//   unshift: () => _Node<T> | null;
-// }
-
 class DoublyLinkedList<T> extends SinglyLinkedList<T> {
   constructor() {
     super();
@@ -18,9 +9,7 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
   push = (value: T): _Node<T> => {
     const oldTail = this.tail;
     const node = super.push(value);
-    if (oldTail) {
-      node.prev = oldTail;
-    }
+    node.prev = oldTail;
     return node;
   };
 
@@ -58,13 +47,25 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
     }
     return super.shift();
   }
-};
+  get = (index: number): _Node<T> | null => {
+    if (index < (this.length / 2)) {
+      return super.get(index);
+    }
+    else {
+      if (!this.tail || (index > this.length - 1 || index < 0)) return null;
+      let counter = this.length - 1;
+      let node = this.tail;
+      while (counter > index) {
+        if (!node.prev) return null;
+        node = node.prev;
+        counter--;
+      }
+      return node;
+    }
+  }
 
-const doubleList = new DoublyLinkedList();
-doubleList.push(5);
-console.log(doubleList);
-console.log(doubleList.shift())
-console.log(doubleList);
+  insert = (value: T, index: number) => super.insert(value, index, { prevEnabled: true });
+};
 
 export default DoublyLinkedList;
 

@@ -86,6 +86,63 @@ class SinglyLinkedList {
         this._length--;
         return oldHead;
     }
+    get(index) {
+        if (!this.head || (index > this.length - 1 || index < 0))
+            return null;
+        let counter = 0;
+        let node = this.head;
+        while (counter < index) {
+            if (!node.next)
+                return null;
+            node = node.next;
+            counter++;
+        }
+        return node;
+    }
+    set(value, index) {
+        const selectedNode = this.get(index);
+        if (selectedNode) {
+            selectedNode.data = value;
+        }
+        return selectedNode;
+    }
+    insert(value, index, options = { prevEnabled: false }) {
+        // would be nice to refactor out the prevEnabled parts to the DoublyLinkedList insert method,
+        // but setting the prev props for surrounding nodes has to be done one way...
+        // * this method should be cleaned up and reorganized anyways since it's too long.
+        const { prevEnabled } = options;
+        let newNode = new Node_1.default(value);
+        if (index === 0) {
+            // insert as head node
+            if (prevEnabled)
+                newNode.prev = null;
+            newNode.next = this.head;
+            this.head = newNode;
+            this._length++;
+            return newNode;
+        }
+        else if (index === this.length) {
+            // insert as tail node
+            if (prevEnabled)
+                newNode.prev = this.tail;
+            this.tail.next = newNode;
+            this.tail = newNode;
+        }
+        else {
+            const prevNode = this.get(index - 1);
+            if (!prevNode)
+                return null; // TODO: throw indexError ? user tried to insert at out of range index.
+            // maybe move the out of bounds errors to top of function?
+            const targetNode = prevNode.next;
+            if (prevEnabled) {
+                newNode.prev = prevNode;
+                targetNode.prev = newNode; // assert exists because ^ insert as new tail node is covered
+            }
+            prevNode.next = newNode;
+            newNode.next = targetNode;
+        }
+        this._length++;
+        return newNode;
+    }
 }
-// const list = new SinglyLinkedList();
 exports.default = SinglyLinkedList;

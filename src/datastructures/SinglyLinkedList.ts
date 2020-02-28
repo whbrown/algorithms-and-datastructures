@@ -3,14 +3,12 @@ import _Node from './Node';
 interface SinglyLinkedList<T> {
   head: null | _Node<T>;
   tail: null | _Node<T>;
-  // these methods cannot be arrow functions in order to be used by the doublelinked subclass
-  // push: (node: _Node<T>) => _Node<T>;
-  // pop: () => _Node<T> | null;
-  // shift: (node: _Node<T>) => _Node<T>;
-  // unshift: () => _Node<T> | null;
 }
 
+interface ListMethodOptions { prevEnabled: boolean }
+
 class SinglyLinkedList<T> {
+  // TODO: Type 'SinglyLinkedList<unknown>' must have a '[Symbol.iterator]()' method that returns an iterator.ts(2488)
   protected _length: number;
   constructor() {
     this._length = 0;
@@ -95,7 +93,63 @@ class SinglyLinkedList<T> {
     this._length--;
     return oldHead;
   }
+
+  get(index: number): _Node<T> | null {
+    if (!this.head || (index > this.length - 1 || index < 0)) return null;
+    let counter = 0;
+    let node = this.head;
+    while (counter < index) {
+      if (!node.next) return null;
+      node = node.next;
+      counter++;
+    }
+    return node;
+  }
+
+  set(value: T, index: number): _Node<T> | null {
+    const selectedNode = this.get(index);
+    if (selectedNode) {
+      selectedNode.data = value;
+    }
+    return selectedNode;
+  }
+
+  insert(value: T, index: number, options: ListMethodOptions = { prevEnabled: false }): _Node<T> | null {
+
+    // would be nice to refactor out the prevEnabled parts to the DoublyLinkedList insert method,
+    // but setting the prev props for surrounding nodes has to be done one way...
+    // * this method should be cleaned up and reorganized anyways since it's too long.
+    const { prevEnabled } = options;
+    let newNode = new _Node(value);
+    if (index === 0) {
+      // insert as head node
+      if (prevEnabled) newNode.prev = null;
+      newNode.next = this.head;
+      this.head = newNode;
+      this._length++;
+      return newNode;
+    }
+    else if (index === this.length) {
+      // insert as tail node
+      if (prevEnabled) newNode.prev = this.tail;
+      this.tail!.next = newNode;
+      this.tail = newNode;
+    }
+    else {
+      const prevNode = this.get(index - 1);
+      if (!prevNode) return null; // TODO: throw indexError ? user tried to insert at out of range index.
+      // maybe move the out of bounds errors to top of function?
+      const targetNode = prevNode.next;
+      if (prevEnabled) {
+        newNode.prev = prevNode;
+        targetNode!.prev = newNode; // assert exists because ^ insert as new tail node is covered
+      }
+      prevNode.next = newNode;
+      newNode.next = targetNode;
+    }
+    this._length++;
+    return newNode;
+  }
 }
-// const list = new SinglyLinkedList();
 
 export default SinglyLinkedList;

@@ -4,23 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const SinglyLinkedList_1 = __importDefault(require("./SinglyLinkedList"));
-// interface DoublyLinkedList<T> extends SinglyLinkedList<T> {
-//   head: null | _Node<T>;
-//   tail: null | _Node<T>;
-//   push: (node: _Node<T>) => _Node<T>;
-//   pop: () => _Node<T> | null;
-//   shift: (node: _Node<T>) => _Node<T>;
-//   unshift: () => _Node<T> | null;
-// }
 class DoublyLinkedList extends SinglyLinkedList_1.default {
     constructor() {
         super();
         this.push = (value) => {
             const oldTail = this.tail;
             const node = super.push(value);
-            if (oldTail) {
-                node.prev = oldTail;
-            }
+            node.prev = oldTail;
             return node;
         };
         this.pop = () => {
@@ -57,13 +47,27 @@ class DoublyLinkedList extends SinglyLinkedList_1.default {
             }
             return super.shift();
         };
+        this.get = (index) => {
+            if (index < (this.length / 2)) {
+                return super.get(index);
+            }
+            else {
+                if (!this.tail || (index > this.length - 1 || index < 0))
+                    return null;
+                let counter = this.length - 1;
+                let node = this.tail;
+                while (counter > index) {
+                    if (!node.prev)
+                        return null;
+                    node = node.prev;
+                    counter--;
+                }
+                return node;
+            }
+        };
+        this.insert = (value, index) => super.insert(value, index, { prevEnabled: true });
     }
     ;
 }
 ;
-const doubleList = new DoublyLinkedList();
-doubleList.push(5);
-console.log(doubleList);
-console.log(doubleList.shift());
-console.log(doubleList);
 exports.default = DoublyLinkedList;
