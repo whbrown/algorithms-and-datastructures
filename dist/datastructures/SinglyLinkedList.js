@@ -108,6 +108,8 @@ class SinglyLinkedList {
         return selectedNode;
     }
     insert(value, index, options = { prevEnabled: false }) {
+        if (index > this.length - 1 || index < 0)
+            return null; // TODO: throw indexError ? user tried to insert at out of range index.
         if (index === 0)
             return this.unshift(value);
         if (index === this.length)
@@ -115,8 +117,6 @@ class SinglyLinkedList {
         const { prevEnabled } = options;
         let newNode = new Node_1.default(value);
         const prevNode = this.get(index - 1);
-        if (!prevNode)
-            return null; // TODO: throw indexError ? user tried to insert at out of range index.
         // maybe move the out of bounds errors to top of function?
         const targetNode = prevNode.next;
         if (prevEnabled) {
@@ -128,17 +128,25 @@ class SinglyLinkedList {
         this._length++;
         return newNode;
     }
+    removeIndex(index, options = { prevEnabled: false }) {
+        if (index > this.length - 1 || index < 0)
+            return null;
+        if (index === 0)
+            return this.shift();
+        if (index === this.length - 1)
+            return this.pop();
+        const { prevEnabled } = options;
+        const prevNode = this.get(index - 1);
+        const targetNode = prevNode.next; // all three assert exists will be true
+        const nextNode = targetNode.next; // because of first line's return null
+        prevNode.next = nextNode;
+        if (prevEnabled) {
+            nextNode.prev = prevNode;
+            targetNode.prev = null;
+        }
+        targetNode.next = null;
+        this._length--;
+        return targetNode;
+    }
 }
-// const list = new SinglyLinkedList();
-// list.push('Ron');
-// list.push('Harry');
-// list.push('Hermione');
-// list.insert('Hagrid', 0);
-// let node = list.head;
-// for (let i = 0; i < list.length; i++) {
-//   console.log(node);
-//   if (node) {
-//     node = node.next;
-//   }
-// }
 exports.default = SinglyLinkedList;

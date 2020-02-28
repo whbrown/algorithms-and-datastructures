@@ -31,7 +31,7 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
   }
 
   unshift = (value: T): _Node<T> => {
-    let oldHead = this.head;
+    let oldHead: _Node<T> | null = this.head;
     let node = super.unshift(value);
     if (oldHead) {
       oldHead.prev = node;
@@ -66,24 +66,16 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
   }
 
   insert = (value: T, index: number) => {
-    if (index === 0) return this.unshift(value);
-    if (index === this.length) return this.push(value);
+    if (index === 0) return this.unshift(value); // uses the doublylinkedlist's unshift/push/shift/pop as
+    if (index === this.length) return this.push(value); // they already cover logic for dealing with prev
     return super.insert(value, index, { prevEnabled: true });
   };
-};
 
-
-const list = new DoublyLinkedList();
-list.push('Ron');
-list.push('Harry');
-list.push('Hermione');
-list.insert('Hagrid', 3);
-let node = list.head;
-for (let i = 0; i < list.length; i++) {
-  console.log(node);
-  if (node) {
-    node = node.next;
+  removeIndex = (index: number): _Node<T> | null => {
+    if (index === 0) return this.shift();
+    if (index === this.length) return this.pop();
+    return super.removeIndex(index, { prevEnabled: true });
   }
-}
+};
 
 export default DoublyLinkedList;

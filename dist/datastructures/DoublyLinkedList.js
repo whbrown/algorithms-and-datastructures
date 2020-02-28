@@ -68,25 +68,20 @@ class DoublyLinkedList extends SinglyLinkedList_1.default {
         };
         this.insert = (value, index) => {
             if (index === 0)
-                return this.unshift(value);
+                return this.unshift(value); // uses the doublylinkedlist's unshift/push/shift/pop as
             if (index === this.length)
-                return this.push(value);
+                return this.push(value); // they already cover logic for dealing with prev
             return super.insert(value, index, { prevEnabled: true });
+        };
+        this.removeIndex = (index) => {
+            if (index === 0)
+                return this.shift();
+            if (index === this.length)
+                return this.pop();
+            return super.removeIndex(index, { prevEnabled: true });
         };
     }
     ;
 }
 ;
-const list = new DoublyLinkedList();
-list.push('Ron');
-list.push('Harry');
-list.push('Hermione');
-list.insert('Hagrid', 3);
-let node = list.head;
-for (let i = 0; i < list.length; i++) {
-    console.log(node);
-    if (node) {
-        node = node.next;
-    }
-}
 exports.default = DoublyLinkedList;
