@@ -16,7 +16,7 @@ class DoublyLinkedList extends SinglyLinkedList_1.default {
         this.pop = () => {
             // returns deleted item, O(1) time, unlike SinglyLinkedList's O(n) pop
             if (!this.tail)
-                return null;
+                return;
             const oldTail = this.tail;
             if (oldTail.prev) {
                 this.tail = oldTail.prev;

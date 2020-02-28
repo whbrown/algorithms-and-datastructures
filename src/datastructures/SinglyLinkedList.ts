@@ -1,5 +1,5 @@
 import _Node from './Node';
-import { listenerCount } from 'cluster';
+import IndexError from '../utils/IndexError';
 
 interface SinglyLinkedList<T> {
   head: null | _Node<T>;
@@ -12,16 +12,20 @@ class SinglyLinkedList<T> {
   // TODO: Type 'SinglyLinkedList<unknown>' must have a '[Symbol.iterator]()' method that returns an iterator.ts(2488)
   protected _length: number;
   constructor() {
+    // TODO: use constructor to initiate a filled linked list like you can do with sets?
+
     this._length = 0;
     this.head = null;
     this.tail = null;
+
+
     // don't like how Object.keys(new SinglyLinkedList) shows `_length` but not the public setter `length`
     // there should be a way to fix this?
 
     // ? maybe make length a public getter with a private setter so that it's readonly outside
     // ? the class, but modifiable inside by the other methods?
     // when implemented, tsc error: Getter and setter accessors do not agree in visibility.ts(2379)
-    // typescript doesn't support this, 
+    // typescript doesn't support this,  
     // see https://github.com/microsoft/TypeScript/issues/2845
     // design meeting notes: https://github.com/microsoft/TypeScript/issues/6735
     // instead, i'm using a slightly uglier work around where there is no setter,
@@ -47,12 +51,12 @@ class SinglyLinkedList<T> {
   }
 
 
-  pop(): _Node<T> | null {
+  pop(): _Node<T> | void {
     // remove last node from list
     // O(n) time since we have to iterate over the whole list to find the new tail,
     // and make the new tail's next point to null.
-    if (!this.head) return null;
-    const node = this.head;
+    if (!this.head) return;
+    let node = this.head;
     if (!node.next) {
       this.head = null;
       this.tail = null;
@@ -60,15 +64,17 @@ class SinglyLinkedList<T> {
       return node;
     }
     else {
-      let childNode: _Node<T> | null = node.next;
-      while (childNode.next !== null) {
+      console.assert(this.length > 1);
+      let targetNode: _Node<T> | null = node.next;
+      while (targetNode.next !== null) {
         // list traversal
-        childNode = childNode.next;
+        node = targetNode;
+        targetNode = targetNode.next;
       }
       node.next = null;
       this.tail = node;
       this._length--;
-      return childNode;
+      return targetNode;
     }
   }
 
@@ -76,17 +82,21 @@ class SinglyLinkedList<T> {
     // add node as first of list
     // O(1)
     const node = new _Node(value);
-    if (!this.length) this.tail = node;
-    node.next = this.head;
-    this.head = node;
+    if (!this.head) {
+      this.head = node;
+      this.tail = node;
+    } else {
+      node.next = this.head;
+      this.head = node;
+    }
     this._length++;
     return this.head;
   }
 
-  shift(): _Node<T> | null {
+  shift(): _Node<T> | void {
     // remove first node from list
     // O(1)
-    if (!this.head) return null;
+    if (!this.head) return;
     const newHead = this.head.next;
     const oldHead = this.head;
     oldHead.next = null;
@@ -97,7 +107,7 @@ class SinglyLinkedList<T> {
   }
 
   get(index: number): _Node<T> | null {
-    if (!this.head || (index > this.length - 1 || index < 0)) return null;
+    if (!this.head || (index > this.length || index < 0)) throw new IndexError;
     let counter = 0;
     let node = this.head;
     while (counter < index) {
@@ -116,11 +126,11 @@ class SinglyLinkedList<T> {
     return selectedNode;
   }
 
-  insert(value: T, index: number, options: ListMethodOptions = { prevEnabled: false }): _Node<T> | null {
-    if (index > this.length - 1 || index < 0) return null; // TODO: throw indexError ? user tried to insert at out of range index.
+  insert(value: T, index?: number, options: ListMethodOptions = { prevEnabled: false }): _Node<T> | null {
+    if (!index) return this.push(value);
+    if (index > this.length || index < 0) throw new IndexError;
     if (index === 0) return this.unshift(value);
     if (index === this.length) return this.push(value);
-
     const { prevEnabled } = options;
     let newNode = new _Node(value);
     const prevNode = this.get(index - 1)!;
@@ -136,8 +146,8 @@ class SinglyLinkedList<T> {
     return newNode;
   }
 
-  removeIndex(index: number, options: ListMethodOptions = { prevEnabled: false }): _Node<T> | null {
-    if (index > this.length - 1 || index < 0) return null;
+  removeIndex(index: number, options: ListMethodOptions = { prevEnabled: false }): _Node<T> | void {
+    if (index > this.length || index < 0) throw new IndexError;
     if (index === 0) return this.shift();
     if (index === this.length - 1) return this.pop();
 
@@ -153,6 +163,30 @@ class SinglyLinkedList<T> {
     targetNode.next = null;
     this._length--;
     return targetNode;
+  }
+  log(beginning: number = 0, end: number = this.length - 1) {
+    if ((beginning > this.length - 1 || beginning < 0)
+      || (end > this.length - 1 || end < 0)) throw new IndexError;
+    let node = this.get(beginning);
+    let count = beginning;
+    while (node) {
+      console.log(`node ${count}`, node)
+      if (node.next) {
+        node = node.next;
+        count++;
+      } else return;
+    }
+  }
+  toString(beginning: number = 0, end: number = this.length - 1) {
+    if ((beginning > this.length - 1 || beginning < 0)
+      || (end > this.length - 1 || end < 0)) throw new IndexError;
+    let node = this.get(beginning);
+    while (node) {
+      console.log(node.data)
+      if (node.next) {
+        node = node.next;
+      } else return;
+    }
   }
 }
 

@@ -1,0 +1,25 @@
+{
+  "name": "algorithms-and-datastructures",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whbrown/algorithms-and-datastructures.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/whbrown/algorithms-and-datastructures/issues"
+  },
+  "homepage": "https://github.com/whbrown/algorithms-and-datastructures#readme",
+  "devDependencies": {
+    "@types/jest": "^25.1.3",
+    "jest": "^25.1.0"
+  },
+  "dependencies": {}
+}

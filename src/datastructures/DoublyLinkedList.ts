@@ -13,9 +13,9 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
     return node;
   };
 
-  pop = (): _Node<T> | null => {
+  pop = (): _Node<T> | void => {
     // returns deleted item, O(1) time, unlike SinglyLinkedList's O(n) pop
-    if (!this.tail) return null;
+    if (!this.tail) return;
     const oldTail = this.tail;
     if (oldTail.prev) {
       this.tail = oldTail.prev;
@@ -40,7 +40,7 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
     return node;
   }
 
-  shift = (): _Node<T> | null => {
+  shift = (): _Node<T> | void => {
     if (this.head && this.head.next) {
       this.head.next.prev = null;
     }
@@ -71,7 +71,7 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
     return super.insert(value, index, { prevEnabled: true });
   };
 
-  removeIndex = (index: number): _Node<T> | null => {
+  removeIndex = (index: number): _Node<T> | void => {
     if (index === 0) return this.shift();
     if (index === this.length) return this.pop();
     return super.removeIndex(index, { prevEnabled: true });
