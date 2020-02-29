@@ -8,6 +8,7 @@ const IndexError_1 = __importDefault(require("../utils/IndexError"));
 class Queue {
     constructor() {
         this.enqueue = (value) => {
+            // doubly linked list's push
             const oldBack = this.back;
             const node = new Node_1.default(value);
             // add node to end of list
@@ -24,6 +25,7 @@ class Queue {
             return node;
         };
         this.dequeue = () => {
+            // doubly linked list's shift
             if (this.front && this.front.next) {
                 this.front.next.prev = null;
             }

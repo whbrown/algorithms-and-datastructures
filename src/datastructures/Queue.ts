@@ -8,6 +8,12 @@ interface Queue<T> {
 
 
 class Queue<T> {
+  // this queue implementation uses doubly linked nodes, allowing for 
+  // faster getting/setting of data in the middle/back of the queue.
+  // while nodes can only be enqueued from the back and dequeued from the front,
+  // their data prop is always mutable and accessible--making this not exactly 
+  // a strict queue, but functional in O(1)time as a queue along with a couple
+  // extra features.
   private _length: number;
   constructor() {
     this._length = 0;
@@ -20,6 +26,7 @@ class Queue<T> {
   }
 
   enqueue = (value: T): _Node<T> => {
+    // doubly linked list's push
     const oldBack = this.back;
     const node = new _Node(value);
     // add node to end of list
@@ -36,6 +43,7 @@ class Queue<T> {
   }
 
   dequeue = (): _Node<T> | void => {
+    // doubly linked list's shift
     if (this.front && this.front.next) {
       this.front.next.prev = null;
     }
