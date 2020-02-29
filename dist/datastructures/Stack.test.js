@@ -11,19 +11,26 @@ describe('base functionality', () => {
     test('stack class exists', () => {
         expect(typeof stack).toBe('object');
     });
-    test('can unshift onto stack', () => {
+    test('can push onto stack', () => {
         stack.push(`push: 0`);
         expect(stack.head).toBeTruthy();
         expect(stack.tail).toBeTruthy();
         expect(stack.head.data).toBe(`push: 0`);
         expect(stack.tail.data).toBe(`push: 0`);
     });
+    test(`popping from stack gets last item pushed`, () => {
+        stack.push('Walrus');
+        stack.push('Orca');
+        stack.push('Leopard seal');
+        const poppedNode = stack.pop();
+        expect(poppedNode).toBeTruthy();
+        expect(poppedNode.data).toBe('Leopard seal');
+    });
     test('get value of node with get method', () => {
         var _a, _b;
         stack = SinglyLinkedList_test_1.fillListWithDummyData(stack);
         const thirdNodeFromTop = stack.get(2);
         expect(thirdNodeFromTop).toBe((_b = (_a = stack.head) === null || _a === void 0 ? void 0 : _a.next) === null || _b === void 0 ? void 0 : _b.next);
-        // console.log(stack.get(5))
     });
     test('able to set value of a node by index (distance from the top)', () => {
         var _a;

@@ -1,5 +1,6 @@
 import _Node from "./Node";
 import SinglyLinkedList from './SinglyLinkedList';
+import IndexError from '../utils/IndexError';
 
 class DoublyLinkedList<T> extends SinglyLinkedList<T> {
   constructor() {
@@ -53,7 +54,7 @@ class DoublyLinkedList<T> extends SinglyLinkedList<T> {
     }
     else {
       // count backwards from tail
-      if (!this.tail || (index > this.length - 1 || index < 0)) return null;
+      if (!this.tail || (index > this.length - 1 || index < 0)) throw new IndexError('list index out of range.');
       let counter = this.length - 1;
       let node = this.tail;
       while (counter > index) {

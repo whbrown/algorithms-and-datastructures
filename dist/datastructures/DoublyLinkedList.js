@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const SinglyLinkedList_1 = __importDefault(require("./SinglyLinkedList"));
+const IndexError_1 = __importDefault(require("../utils/IndexError"));
 class DoublyLinkedList extends SinglyLinkedList_1.default {
     constructor() {
         super();
@@ -54,7 +55,7 @@ class DoublyLinkedList extends SinglyLinkedList_1.default {
             else {
                 // count backwards from tail
                 if (!this.tail || (index > this.length - 1 || index < 0))
-                    return null;
+                    throw new IndexError_1.default('list index out of range.');
                 let counter = this.length - 1;
                 let node = this.tail;
                 while (counter > index) {
