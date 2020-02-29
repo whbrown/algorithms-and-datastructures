@@ -1,14 +1,17 @@
+import _Node from './Node';
+import Queue from './Queue';
+
 interface BinaryTreeNode<T> {
   left: BinaryTreeNode<T> | null;
   right: BinaryTreeNode<T> | null;
-  value: T;
+  data: T;
 }
 
 class BinaryTreeNode<T> {
   constructor(value: T) {
     this.left = null;
     this.right = null;
-    this.value = value as T;
+    this.data = value as T;
   }
 }
 
@@ -32,14 +35,14 @@ class BinarySearchTree<T> {
     }
     let targetNode: BinaryTreeNode<T> = this.root;
     while (true) {
-      if (node.value < targetNode.value) {
+      if (node.data < targetNode.data) {
         if (!targetNode.left) {
           targetNode.left = node;
           return node;
         }
         targetNode = targetNode.left;
       }
-      else if (node.value >= targetNode.value) {
+      else if (node.data >= targetNode.data) {
         if (!targetNode.right) {
           targetNode.right = node;
           return node;
@@ -50,17 +53,35 @@ class BinarySearchTree<T> {
   }
   find(value: T, startingNode: BinaryTreeNode<T> | null = this.root): BinaryTreeNode<T> | null {
     if (!startingNode) return null;
-    if (value < startingNode.value) {
+    if (value < startingNode.data) {
       return this.find(value, startingNode.left)
     }
-    if (value > startingNode.value) {
+    if (value > startingNode.data) {
       return this.find(value, startingNode.right)
     }
     // found!
     return startingNode;
   }
 
-  DFS(cbFn: (node: BinaryTreeNode<T>) => void, startingNode: BinaryTreeNode<T> | null = this.root, options = { order: 'ascending' }) {
+  BFS(cbFn: ((node: BinaryTreeNode<T>) => void) | null, startingNode: BinaryTreeNode<T> | null = this.root) {
+    if (startingNode === null) return null;
+    const queue = new Queue<BinaryTreeNode<T>>()
+    queue.enqueue(startingNode);
+    const helper = (node: BinaryTreeNode<T> = startingNode): void => {
+      while (queue.length) {
+        let poppedNode = queue.dequeue();
+        if (poppedNode && cbFn) cbFn(poppedNode.data)
+      }
+
+      if (node.left) queue.enqueue(node.left);
+      if (node.right) queue.enqueue(node.right);
+      if (node.left) helper(node.left);
+      if (node.right) helper(node.right);
+    }
+    helper();
+  }
+
+  DFS(cbFn: ((node: BinaryTreeNode<T>) => void) | null, startingNode: BinaryTreeNode<T> | null = this.root, options = { order: 'ascending' }) {
     // calls the callback function on the nodes in the specified order 
     // could reorganize parameterization, little bit too verbose when user wants to use order: 'descending' they also have to pass in the root node
     if (startingNode === null) return null;
@@ -68,12 +89,12 @@ class BinarySearchTree<T> {
     const helper = (node: BinaryTreeNode<T> = startingNode): void => {
       if (order === 'ascending') {
         if (node.left) helper(node.left);
-        cbFn(node);
+        if (cbFn) cbFn(node);
         if (node.right) helper(node.right);
       }
       if (order === 'descending') {
         if (node.right) helper(node.right);
-        cbFn(node);
+        if (cbFn) cbFn(node);
         if (node.left) helper(node.left);
       }
     };
@@ -84,12 +105,12 @@ class BinarySearchTree<T> {
     const { order } = options;
     if (order === 'ascending') {
       if (startingNode.left) this.logTree(startingNode.left);
-      console.log(startingNode.value);
+      console.log(startingNode.data);
       if (startingNode.right) this.logTree(startingNode.right);
     }
     if (order === 'descending') {
       if (startingNode.right) return this.logTree(startingNode.right, { order: 'descending' });
-      console.log(startingNode.value);
+      console.log(startingNode.data);
       if (startingNode.left) return this.logTree(startingNode.left, { order: 'descending' });
     }
   }

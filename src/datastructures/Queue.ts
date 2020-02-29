@@ -1,5 +1,6 @@
 import _Node from './Node';
 import IndexError from '../utils/IndexError';
+import BinaryTreeNode from './BinarySearchTree';
 
 interface Queue<T> {
   front: null | _Node<T>;

@@ -1,10 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const Queue_1 = __importDefault(require("./Queue"));
 class BinaryTreeNode {
     constructor(value) {
         this.left = null;
         this.right = null;
-        this.value = value;
+        this.data = value;
     }
 }
 exports.BinaryTreeNode = BinaryTreeNode;
@@ -21,14 +25,14 @@ class BinarySearchTree {
         }
         let targetNode = this.root;
         while (true) {
-            if (node.value < targetNode.value) {
+            if (node.data < targetNode.data) {
                 if (!targetNode.left) {
                     targetNode.left = node;
                     return node;
                 }
                 targetNode = targetNode.left;
             }
-            else if (node.value >= targetNode.value) {
+            else if (node.data >= targetNode.data) {
                 if (!targetNode.right) {
                     targetNode.right = node;
                     return node;
@@ -40,14 +44,36 @@ class BinarySearchTree {
     find(value, startingNode = this.root) {
         if (!startingNode)
             return null;
-        if (value < startingNode.value) {
+        if (value < startingNode.data) {
             return this.find(value, startingNode.left);
         }
-        if (value > startingNode.value) {
+        if (value > startingNode.data) {
             return this.find(value, startingNode.right);
         }
         // found!
         return startingNode;
+    }
+    BFS(cbFn, startingNode = this.root) {
+        if (startingNode === null)
+            return null;
+        const queue = new Queue_1.default();
+        queue.enqueue(startingNode);
+        const helper = (node = startingNode) => {
+            while (queue.length) {
+                let poppedNode = queue.dequeue();
+                if (poppedNode && cbFn)
+                    cbFn(poppedNode.data);
+            }
+            if (node.left)
+                queue.enqueue(node.left);
+            if (node.right)
+                queue.enqueue(node.right);
+            if (node.left)
+                helper(node.left);
+            if (node.right)
+                helper(node.right);
+        };
+        helper();
     }
     DFS(cbFn, startingNode = this.root, options = { order: 'ascending' }) {
         // calls the callback function on the nodes in the specified order 
@@ -59,14 +85,16 @@ class BinarySearchTree {
             if (order === 'ascending') {
                 if (node.left)
                     helper(node.left);
-                cbFn(node);
+                if (cbFn)
+                    cbFn(node);
                 if (node.right)
                     helper(node.right);
             }
             if (order === 'descending') {
                 if (node.right)
                     helper(node.right);
-                cbFn(node);
+                if (cbFn)
+                    cbFn(node);
                 if (node.left)
                     helper(node.left);
             }
@@ -80,14 +108,14 @@ class BinarySearchTree {
         if (order === 'ascending') {
             if (startingNode.left)
                 this.logTree(startingNode.left);
-            console.log(startingNode.value);
+            console.log(startingNode.data);
             if (startingNode.right)
                 this.logTree(startingNode.right);
         }
         if (order === 'descending') {
             if (startingNode.right)
                 return this.logTree(startingNode.right, { order: 'descending' });
-            console.log(startingNode.value);
+            console.log(startingNode.data);
             if (startingNode.left)
                 return this.logTree(startingNode.left, { order: 'descending' });
         }
