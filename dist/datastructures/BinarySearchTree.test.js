@@ -94,11 +94,14 @@ describe('depth first search', () => {
     });
     test('can log a populated tree in ascending order', () => {
         populateTree(BST);
-        expect(BST.DFS()).toEqual([1, 3, 4, 5, 6, 8, 9]);
+        let ascendingArray = [];
+        BST.DFS((node) => { ascendingArray.push(node.value); });
+        expect(ascendingArray).toEqual([1, 3, 4, 5, 6, 8, 9]);
     });
     test('can log a populated tree in descending order', () => {
         populateTree(BST);
-        console.log(BST.DFS(BST.root, { order: 'descending' }));
-        expect(BST.DFS(BST.root, { order: 'descending' })).toEqual([9, 8, 6, 5, 4, 3, 1]);
+        let descendingArray = [];
+        BST.DFS((node) => { descendingArray.push(node.value); }, BST.root, { order: 'descending' });
+        expect(descendingArray).toEqual([9, 8, 6, 5, 4, 3, 1]);
     });
 });

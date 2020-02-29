@@ -49,29 +49,29 @@ class BinarySearchTree {
         // found!
         return startingNode;
     }
-    DFS(startingNode = this.root, options = { order: 'ascending' }) {
+    DFS(cbFn, startingNode = this.root, options = { order: 'ascending' }) {
+        // calls the callback function on the nodes in the specified order 
+        // could reorganize parameterization, little bit too verbose when user wants to use order: 'descending' they also have to pass in the root node
         if (startingNode === null)
             return null;
-        const array = [];
-        const helper = (node = startingNode, options = { order: 'ascending' }) => {
-            const { order } = options;
+        const { order } = options;
+        const helper = (node = startingNode) => {
             if (order === 'ascending') {
                 if (node.left)
                     helper(node.left);
-                array.push(node.value);
+                cbFn(node);
                 if (node.right)
                     helper(node.right);
             }
             if (order === 'descending') {
                 if (node.right)
-                    helper(node.right, { order: 'descending' });
-                array.push(node.value);
+                    helper(node.right);
+                cbFn(node);
                 if (node.left)
-                    helper(node.left, { order: 'descending' });
+                    helper(node.left);
             }
         };
-        helper(startingNode, options);
-        return array;
+        helper();
     }
     logTree(startingNode = this.root, options = { order: 'ascending' }) {
         if (!startingNode)

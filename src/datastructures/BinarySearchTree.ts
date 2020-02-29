@@ -60,24 +60,24 @@ class BinarySearchTree<T> {
     return startingNode;
   }
 
-  DFS(startingNode: BinaryTreeNode<T> | null = this.root, options = { order: 'ascending' }): T[] | null {
+  DFS(cbFn: (node: BinaryTreeNode<T>) => void, startingNode: BinaryTreeNode<T> | null = this.root, options = { order: 'ascending' }) {
+    // calls the callback function on the nodes in the specified order 
+    // could reorganize parameterization, little bit too verbose when user wants to use order: 'descending' they also have to pass in the root node
     if (startingNode === null) return null;
-    const array: T[] = [];
-    const helper = (node: BinaryTreeNode<T> = startingNode, options = { order: 'ascending' }): void => {
-      const { order } = options;
+    const { order } = options;
+    const helper = (node: BinaryTreeNode<T> = startingNode): void => {
       if (order === 'ascending') {
         if (node.left) helper(node.left);
-        array.push(node.value);
+        cbFn(node);
         if (node.right) helper(node.right);
       }
       if (order === 'descending') {
-        if (node.right) helper(node.right, { order: 'descending' });
-        array.push(node.value);
-        if (node.left) helper(node.left, { order: 'descending' });
+        if (node.right) helper(node.right);
+        cbFn(node);
+        if (node.left) helper(node.left);
       }
     };
-    helper(startingNode, options);
-    return array;
+    helper();
   }
   logTree(startingNode: BinaryTreeNode<T> | null = this.root, options = { order: 'ascending' }): void {
     if (!startingNode) return console.log(null);
