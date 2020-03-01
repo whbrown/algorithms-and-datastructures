@@ -54,6 +54,9 @@ class BinarySearchTree {
         return startingNode;
     }
     BFS(cbFn, startingNode = this.root) {
+        // this probably should be refactored to a simpler solution where
+        // the dequeueing happens after the whole tree has been place 
+        // in the queue.
         if (startingNode === null)
             return null;
         const queue = new Queue_1.default();
@@ -97,6 +100,22 @@ class BinarySearchTree {
                     cbFn(node);
                 if (node.left)
                     helper(node.left);
+            }
+            if (order === 'preorder') {
+                if (cbFn)
+                    cbFn(node);
+                if (node.left)
+                    helper(node.left);
+                if (node.right)
+                    helper(node.right);
+            }
+            if (order === 'postorder') {
+                if (node.left)
+                    helper(node.left);
+                if (node.right)
+                    helper(node.right);
+                if (cbFn)
+                    cbFn(node);
             }
         };
         helper();
