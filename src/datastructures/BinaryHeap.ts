@@ -32,39 +32,56 @@ class BinaryHeap<T extends number> {
   extract(): T | void {
 
     // badly in need of a refactor
-
-    if (!this.values.length) return;
-    const newRoot: T = this.values.pop()!;
-    const extractedNode = this.values[0];
-    this.values[0] = newRoot;
+    const { values } = this;
+    if (!values.length) return;
+    const newRoot: T = values.pop()!;
+    const extractedNode = values[0];
+    values[0] = newRoot;
     let nodeIndex = 0;
-    if (this.type === 'max' && this.values[0] > Math.max(this.values[1], this.values[2]) || this.type === 'min' && this.values[0] < Math.min(this.values[1], this.values[2])) return extractedNode;
+    if (this.type === 'max' &&
+      values[0] > Math.max(values[1], values[2])
+      || this.type === 'min' &&
+      values[0] < Math.min(values[1], values[2])) {
+      return extractedNode;
+    }
     const helper = (): void => {
-      let children: {
-        left: [T, number];
-        right: [T, number];
-      } = { left: [this.values[nodeIndex * 2 + 1], nodeIndex * 2 + 1], right: [this.values[nodeIndex * 2 + 2], nodeIndex * 2 + 2] };
-      if (nodeIndex * 2 + 1 >= this.values.length) return;
+      const left: [T, number] = [values[nodeIndex * 2 + 1], nodeIndex * 2 + 1]
+      const right: [T, number] = [values[nodeIndex * 2 + 2], nodeIndex * 2 + 2]
+      if (nodeIndex * 2 + 1 >= values.length) return;
       if (this.type === 'max') {
-        if ((children.left[0] <= this.values[nodeIndex] || children.left[0] === undefined) && (children.right[0] <= this.values[nodeIndex] || children.right[0] === undefined)) return;
-        if (children.left[0] > children.right[0]) {
-          [this.values[nodeIndex], this.values[children.left[1]]] = [this.values[children.left[1]], this.values[nodeIndex]]; // swap
-          nodeIndex = children.left[1];
+        if ((left[0] <= values[nodeIndex]
+          || left[0] === undefined)
+          && (right[0] <= values[nodeIndex]
+            || right[0] === undefined)) {
+          return; // bubble down successful, exit recursion;
+        }
+        if (left[0] > right[0]) {
+          [values[nodeIndex], values[left[1]]] =
+            [values[left[1]], values[nodeIndex]]; // swap left, recurse
+          nodeIndex = left[1];
         }
         else {
-          [this.values[nodeIndex], this.values[children.right[1]]] = [this.values[children.right[1]], this.values[nodeIndex]]; // swap
-          nodeIndex = children.right[1];
+          [values[nodeIndex], values[right[1]]] =
+            [values[right[1]], values[nodeIndex]]; // swap right, recurse
+          nodeIndex = right[1];
         }
       }
       else if (this.type === 'min') {
-        if ((children.left[0] >= this.values[nodeIndex] || children.left[0] === undefined) && (children.right[0] >= this.values[nodeIndex] || children.right[0] === undefined)) return;
-        if (children.left[0] < children.right[0]) {
-          [this.values[nodeIndex], this.values[children.left[1]]] = [this.values[children.left[1]], this.values[nodeIndex]]; // swap
-          nodeIndex = children.left[1];
+        if ((left[0] >= values[nodeIndex]
+          || left[0] === undefined)
+          && (right[0] >= values[nodeIndex]
+            || right[0] === undefined)) {
+          return; // bubble down successful, exit recursion;
+        }
+        if (left[0] < right[0]) {
+          [values[nodeIndex], values[left[1]]] =
+            [values[left[1]], values[nodeIndex]]; // swap left, recurse
+          nodeIndex = left[1];
         }
         else {
-          [this.values[nodeIndex], this.values[children.right[1]]] = [this.values[children.right[1]], this.values[nodeIndex]]; // swap
-          nodeIndex = children.right[1];
+          [values[nodeIndex], values[right[1]]] =
+            [values[right[1]], values[nodeIndex]]; // swap right, recurse
+          nodeIndex = right[1];
         }
       }
       helper(); // recurse
@@ -74,8 +91,4 @@ class BinaryHeap<T extends number> {
   }
 }
 
-// if ((this.type === 'max' && children.left[0] <= this.values[nodeIndex]) && (children.right[0] <= this.values[nodeIndex])) return;
-
 export default BinaryHeap;
-
-// if (nodeIndex * 2 + 1 >= this.values.length || (this.type === 'max' && children.left[0] <= this.values[nodeIndex]) && (children.right[0] <= this.values[nodeIndex]) || (this.type === 'min' && children.left[0] >= this.values[nodeIndex]) && (children.right[0] >= this.values[nodeIndex])) 
