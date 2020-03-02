@@ -10,12 +10,10 @@ beforeEach(() => {
     MaxBH = new BinaryHeap_1.default('max');
     MinBH = new BinaryHeap_1.default('min');
 });
-describe('max binary heap base functionality', () => {
+describe('max binary heap insert method tests', () => {
     test('insert method exists', () => {
         expect(typeof MaxBH.insert).toBe('function');
     });
-});
-describe('max binary heap insert method tests', () => {
     test('can insert value as root', () => {
         MaxBH.insert(100);
         expect(MaxBH.values).toEqual([100]);
@@ -65,13 +63,37 @@ describe('min binary heap insert method tests', () => {
         expect(MaxBH.values).toEqual([100, 3, 2, 1]);
         expect(MinBH.values).toEqual([1, 2, 3, 100]);
     });
-    test('max: can extract root node and heap will sink down a new root node from the end, and end up with a heap with proper form', () => {
+});
+describe('max binary heap extract method', () => {
+    test('extracting from an empty heap returns void', () => {
+        const extract = MaxBH.extract();
+        expect(extract).toBeUndefined();
+    });
+    test('extracting from a max heap with one item left results in an empty values array', () => {
+        MaxBH.insert(3);
+        const extractedMaxNode = MaxBH.extract();
+        expect(extractedMaxNode).toBe(3);
+        expect(MaxBH.values).toEqual([]);
+    });
+    test('can extract root node and heap will sink down a new root node from the end, and end up with a heap with proper form', () => {
         MaxBH = new BinaryHeap_1.default('max', [100, 200, 300, 400, 500]);
         const extractedMaxNode = MaxBH.extract();
         expect(extractedMaxNode).toBe(500);
         expect(MaxBH.values).toEqual([400, 300, 200, 100]);
     });
-    test('min: can extract root node and heap will sink down a new root node from the end, and end up with a heap with proper form', () => {
+});
+describe('min binary heap extract method', () => {
+    test('extracting from an empty heap returns void', () => {
+        const extract = MinBH.extract();
+        expect(extract).toBeUndefined();
+    });
+    test('extracting from a min heap with one item left results in an empty values array', () => {
+        MinBH.insert(3);
+        const extractedMinNode = MinBH.extract();
+        expect(extractedMinNode).toBe(3);
+        expect(MinBH.values).toEqual([]);
+    });
+    test('can extract root node and heap will sink down a new root node from the end, and end up with a heap with proper form', () => {
         MinBH = new BinaryHeap_1.default('min', [500, 400, 300, 200, 100]);
         const extractedMinNode = MinBH.extract();
         expect(extractedMinNode).toBe(100);
