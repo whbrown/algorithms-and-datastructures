@@ -1,7 +1,7 @@
 import SortOptions from './SortOptions';
 
-function quickSort<T>(arr: T[], options: SortOptions = { direction: 'ascending' }, indexRange: [number, number] = [0, arr.length - 1]): T[] {
-  // TODO: add ability to pass cbFn as argument used to compare values, like js builtin sort
+function quickSort<T>(arr: T[], options: SortOptions = { direction: 'ascending' }, [left, right]: [number, number] = [0, arr.length - 1]): T[] {
+  // TODO: add ability to pass as argument a cbFn used to compare values, like js built-in sort
   const pivot = (arr: T[], indexRange: [number, number] = [0, arr.length - 1]): number => {
     const { direction } = options;
     const [startIndex, lastIndex] = indexRange;
@@ -22,12 +22,9 @@ function quickSort<T>(arr: T[], options: SortOptions = { direction: 'ascending' 
     pivotIndex += matches;
     return pivotIndex;
   }
-  let [left, right] = indexRange;
-  let pivotIndex = pivot(arr, indexRange);
-  if (pivotIndex - left > 1) {
+  if (left < right) {
+    let pivotIndex = pivot(arr, [left, right]);
     quickSort(arr, options, [left, pivotIndex - 1]);
-  }
-  if (right - pivotIndex > 1) {
     quickSort(arr, options, [pivotIndex + 1, right]);
   }
   return arr;

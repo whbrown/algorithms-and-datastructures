@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function quickSort(arr, options = { direction: 'ascending' }, indexRange = [0, arr.length - 1]) {
-    // TODO: add ability to pass cbFn as argument used to compare values, like js builtin sort
+function quickSort(arr, options = { direction: 'ascending' }, [left, right] = [0, arr.length - 1]) {
+    // TODO: add ability to pass as argument a cbFn used to compare values, like js built-in sort
     const pivot = (arr, indexRange = [0, arr.length - 1]) => {
         const { direction } = options;
         const [startIndex, lastIndex] = indexRange;
@@ -22,12 +22,9 @@ function quickSort(arr, options = { direction: 'ascending' }, indexRange = [0, a
         pivotIndex += matches;
         return pivotIndex;
     };
-    let [left, right] = indexRange;
-    let pivotIndex = pivot(arr, indexRange);
-    if (pivotIndex - left > 1) {
+    if (left < right) {
+        let pivotIndex = pivot(arr, [left, right]);
         quickSort(arr, options, [left, pivotIndex - 1]);
-    }
-    if (right - pivotIndex > 1) {
         quickSort(arr, options, [pivotIndex + 1, right]);
     }
     return arr;
