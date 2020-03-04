@@ -6,6 +6,7 @@ class PriorityNode {
         this.priority = priority;
     }
 }
+exports.PriorityNode = PriorityNode;
 class PriorityQueue {
     constructor(type, initialValues) {
         this.values = [];
@@ -14,6 +15,9 @@ class PriorityQueue {
             initialValues.forEach((node) => this.enqueue(node.data, node.priority));
         }
     }
+    get length() {
+        return this.values.length;
+    }
     enqueue(value, priority) {
         // recursive insert implementation, returns the heap with the value inserted
         const node = new PriorityNode(value, priority);
@@ -21,6 +25,8 @@ class PriorityQueue {
         let valueIndex = this.values.length - 1;
         const helper = () => {
             let parentIndex = Math.floor((valueIndex - 1) / 2);
+            if (parentIndex < 0 || parentIndex > this.values.length - 1)
+                return;
             if (this.type === 'max' && this.values[parentIndex].priority < priority
                 || this.type === 'min' && this.values[parentIndex].priority > priority) {
                 [this.values[valueIndex], this.values[parentIndex]] = [this.values[parentIndex], this.values[valueIndex]]; // swap parent and child
@@ -32,6 +38,7 @@ class PriorityQueue {
         return this.values;
     }
     dequeue() {
+        var _a, _b, _c, _d, _e, _f;
         const { values } = this;
         if (!values.length)
             return;
@@ -42,20 +49,23 @@ class PriorityQueue {
         values[0] = newRoot;
         let nodeIndex = 0;
         if (this.type === 'max' &&
-            values[0].priority > Math.max(values[1].priority, values[2].priority)
+            ((_a = values[0]) === null || _a === void 0 ? void 0 : _a.priority) > Math.max((_b = values[1]) === null || _b === void 0 ? void 0 : _b.priority, (_c = values[2]) === null || _c === void 0 ? void 0 : _c.priority)
             || this.type === 'min' &&
-                values[0].priority < Math.min(values[1].priority, values[2].priority)) {
+                ((_d = values[0]) === null || _d === void 0 ? void 0 : _d.priority) < Math.min((_e = values[1]) === null || _e === void 0 ? void 0 : _e.priority, (_f = values[2]) === null || _f === void 0 ? void 0 : _f.priority)) {
             return extractedNode;
         }
         const helper = () => {
-            const left = [values[nodeIndex * 2 + 1].priority, nodeIndex * 2 + 1];
-            const right = [values[nodeIndex * 2 + 2].priority, nodeIndex * 2 + 2];
+            var _a, _b, _c, _d, _e, _f;
             if (nodeIndex * 2 + 1 >= values.length)
                 return;
+            const left = [(_a = values[nodeIndex * 2 + 1]) === null || _a === void 0 ? void 0 : _a.priority, nodeIndex * 2 + 1];
+            const right = [(_b = values[nodeIndex * 2 + 2]) === null || _b === void 0 ? void 0 : _b.priority, nodeIndex * 2 + 2];
             if (this.type === 'max') {
-                if ((left[0] <= values[nodeIndex].priority // both children larger or undefined
+                if (!left)
+                    return;
+                if ((left[0] <= ((_c = values[nodeIndex]) === null || _c === void 0 ? void 0 : _c.priority) // both children larger or undefined
                     || left[0] === undefined)
-                    && (right[0] <= values[nodeIndex].priority
+                    && (right[0] <= ((_d = values[nodeIndex]) === null || _d === void 0 ? void 0 : _d.priority)
                         || right[0] === undefined)) {
                     return; // bubble down successful, exit recursion;
                 }
@@ -71,9 +81,9 @@ class PriorityQueue {
                 }
             }
             else if (this.type === 'min') {
-                if ((left[0] >= values[nodeIndex].priority // both children smaller or undefined
+                if ((left[0] >= ((_e = values[nodeIndex]) === null || _e === void 0 ? void 0 : _e.priority) // both children smaller or undefined
                     || left[0] === undefined)
-                    && (right[0] >= values[nodeIndex].priority
+                    && (right[0] >= ((_f = values[nodeIndex]) === null || _f === void 0 ? void 0 : _f.priority)
                         || right[0] === undefined)) {
                     return; // bubble down successful, exit recursion;
                 }

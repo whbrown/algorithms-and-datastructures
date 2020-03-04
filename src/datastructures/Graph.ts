@@ -1,11 +1,10 @@
 import Stack from './Stack';
 import Queue from './Queue';
 import _Node from './Node';
+import PriorityQueue, { PriorityNode } from './PriorityQueue';
 
-interface vertex { key: string, value?: unknown };
-
-// type edge = { target: string, weight?: number }
-type edge = string;
+interface vertex { key: string, value: unknown };
+interface edge { target: string, weight?: number };
 
 interface Graph {
   adjacencyList: AdjacencyList;
@@ -42,6 +41,9 @@ class Graph {
       }
     }
   };
+  public get size() {
+    return { vertices: this.vertices.length, edges: this.adjacencyList.length };
+  }
   addVertex = (key: string, value: unknown = null): edge[] => {
     const vertex: vertex = { key: key, value: value }
     if (!this.adjacencyList[key]) this.adjacencyList[key] = [];
@@ -64,35 +66,41 @@ class Graph {
         break;
       default:
         throw new TypeError('Incorrect type passed for vertices array. Try a key string or vertex object');
-    }
-  }
+    };
+  };
 
-  addEdge = (firstKey: string, secondKey: string): AdjacencyList | null => {
+  addEdge = (firstKey: string, secondKey: string, weight?: number): AdjacencyList | null => {
     // bidirectional
+    let weightProp = weight ? { weight: weight } : {}; /* going to spread this object into
+    eventual edge object. if no weight value given, the weight prop will not exist at all on
+    the edge object as spreading an empty object yields nothing */
     const { direction } = this.options;
     if (!this.adjacencyList[firstKey] || !this.adjacencyList[secondKey]) {
       return null; // maybe throw error instead?
     }
-    if (!this.adjacencyList[firstKey].find((key) => key === secondKey)) {
-      this.adjacencyList[firstKey].push(secondKey);
+    if (!this.adjacencyList[firstKey].find((edge) => edge.target === secondKey)) {
+      this.adjacencyList[firstKey].push({ target: secondKey, ...weightProp });
     }
-    if (direction === 'bi' && !this.adjacencyList[secondKey].find((key) => key === firstKey)) {
-      this.adjacencyList[secondKey].push(firstKey);
+    if (direction === 'bi' && !this.adjacencyList[secondKey].find((edge) => edge.target === firstKey)) {
+      this.adjacencyList[secondKey].push({ target: firstKey, ...weightProp });
     }
     return this.adjacencyList;
   };
-  addEdges = (edges: [string, string][]) => {
-    edges.forEach(([fromKey, toKey]) => this.addEdge(fromKey, toKey));
+
+  addEdges = (edges: { from: string, to: string, weight?: number }[]) => {
+    for (let edge of edges) {
+      this.addEdge(edge.from, edge.to, edge.weight);
+    }
   }
 
   removeEdge = (firstKey: string, secondKey: string): AdjacencyList | null => {
     const { direction } = this.options;
-    const firstEdge = this.adjacencyList[firstKey].findIndex((key) => key === secondKey);
+    const firstEdge = this.adjacencyList[firstKey].findIndex((edge) => edge.target === secondKey);
     if (firstEdge !== -1) {
       this.adjacencyList[firstKey].splice(firstEdge, 1);
     }
     if (direction === 'bi') {
-      const secondEdge = this.adjacencyList[secondKey].findIndex((key) => key === firstKey);
+      const secondEdge = this.adjacencyList[secondKey].findIndex((edge) => edge.target === firstKey);
       if (secondEdge !== -1) {
         this.adjacencyList[secondKey].splice(secondEdge, 1);
       }
@@ -105,14 +113,14 @@ class Graph {
     const { direction } = this.options;
     if (direction === 'bi') {
       for (let edge of this.adjacencyList[key]) {
-        this.adjacencyList[edge] = this.adjacencyList[edge].filter(v => v !== key);
+        this.adjacencyList[edge.target] = this.adjacencyList[edge.target].filter(edge => edge.target !== key);
       }
     }
     else if (direction === 'mono') {
       /* have to iterate over every vertex to delete any mono-directional 
          references to the removed vertex */
-      for (let edge of Object.keys(this.adjacencyList)) {
-        this.adjacencyList[edge] = this.adjacencyList[edge].filter(v => v !== key);
+      for (let vertexKey of Object.keys(this.adjacencyList)) {
+        this.adjacencyList[vertexKey] = this.adjacencyList[vertexKey].filter(edge => edge.target !== key);
       }
     }
     delete this.adjacencyList[key];
@@ -135,9 +143,9 @@ class Graph {
       if (!this.adjacencyList[vertexKey]) return;
       results.push(map(this.vertices[vertexKey]));
       visited[vertexKey] = true;
-      for (let neighbour of this.adjacencyList[vertexKey]) {
-        if (!visited[neighbour]) {
-          helper(neighbour);
+      for (let neighbourEdge of this.adjacencyList[vertexKey]) {
+        if (!visited[neighbourEdge.target]) {
+          helper(neighbourEdge.target);
         }
       }
     }
@@ -158,9 +166,9 @@ class Graph {
       if (!visited[vertex]) {
         visited[vertex] = true;
         results.push(map(this.vertices[vertex]));
-        for (let neighbour of this.adjacencyList[vertex]) {
-          if (!visited[neighbour]) {
-            stack.push(neighbour);
+        for (let neighbourEdge of this.adjacencyList[vertex]) {
+          if (!visited[neighbourEdge.target]) {
+            stack.push(neighbourEdge.target);
           }
         }
       }
@@ -180,16 +188,76 @@ class Graph {
       if (dequeuedNode) {
         let dequeuedKey = dequeuedNode.data;
         results.push(map(this.vertices[dequeuedKey]));
-        for (let neighbour of this.adjacencyList[dequeuedKey]) {
-          if (!visited[neighbour]) {
-            visited[neighbour] = true;
-            queue.enqueue(neighbour);
+        for (let neighbourEdge of this.adjacencyList[dequeuedKey]) {
+          if (!visited[neighbourEdge.target]) {
+            visited[neighbourEdge.target] = true;
+            queue.enqueue(neighbourEdge.target);
           }
         }
       }
     }
     return results;
   };
+
+  dijkstra = (start: vertex | string, end: vertex | string) => {
+    // dijkstra's shortest path graph algorithm
+    // *** setup starting state
+    if (typeof start === 'object') start = start.key;
+    if (typeof end === 'object') end = end.key;
+    if (!this.adjacencyList[start][0].weight || !this.adjacencyList[end][0].weight) {
+      return new ReferenceError(`cannot find required property 'weight' on the graph's edges.`);
+    };
+    let distances: { [key: string]: number } =
+      Object.keys(this.adjacencyList).reduce((accumulator: { [key: string]: number }, key) => {
+        accumulator[key] = Infinity;
+        return accumulator;
+      }, {});
+    distances[start] = 0;
+    let priorityQueue = new PriorityQueue<string>('min');
+    Object.keys(distances).forEach((key) => {
+      priorityQueue.enqueue(key, distances[key]);
+    });
+    const prev: { [key: string]: string | null } = Object.keys(this.adjacencyList).reduce((accumulator: { [key: string]: string | null }, key) => {
+      accumulator[key] = null;
+      return accumulator;
+    }, {});
+
+    // *** begin loop
+    while (priorityQueue.length) {
+      let vertex = priorityQueue.dequeue() as PriorityNode<string>;
+      if (vertex.data === end) {
+        // end is top priority -> done
+        break;
+      };
+      if (vertex || distances[vertex] !== Infinity) {
+        for (let neighbour of this.adjacencyList[vertex.data]) {
+          let distance = distances[vertex.data] + <number>neighbour.weight;
+          if (distance < distances[neighbour.target]) {
+            distances[neighbour.target] = distance;
+            prev[neighbour.target] = vertex.data;
+            priorityQueue.enqueue(neighbour.target, distance);
+          }
+        }
+      }
+    };
+
+    // *** create return object
+    const path: { distance: number; route: string[] } = {
+      distance: distances[end],
+      route: []
+    };
+    const fillRoute = (key: string): string[] => {
+      let array: string[] = [];
+      if (prev[key] === null) {
+        return array;
+      } else {
+        array.push(<string>prev[key]);
+        return array.concat(fillRoute(<string>prev[key]));
+      }
+    }
+    path.route = fillRoute(end).reverse().concat('E');
+    return path;
+  }
 }
 
 export default Graph;

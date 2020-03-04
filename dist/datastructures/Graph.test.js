@@ -46,8 +46,8 @@ describe('basic graph functionality', () => {
         graph.addVertex('Alice');
         graph.addVertex('Caterpillar');
         graph.addEdge('Alice', 'Caterpillar');
-        expect(graph.adjacencyList['Alice']).toEqual(['Caterpillar']);
-        expect(graph.adjacencyList['Caterpillar']).toEqual(['Alice']);
+        expect(graph.adjacencyList['Alice'].map(edge => edge.target)).toEqual(['Caterpillar']);
+        expect(graph.adjacencyList['Caterpillar'].map(edge => edge.target)).toEqual(['Alice']);
     });
     test(`adding a bidirectional edge between one or two vertices which don't exist returns null; success returns adjacency list`, () => {
         expect(graph.addEdge('Alice', 'Cheshire Cat')).toBeNull(); // beginning of book
@@ -61,33 +61,30 @@ describe('basic graph functionality', () => {
         graph.addVertex('The Duchess');
         graph.addEdge('Alice', 'The Duchess');
         graph.addVertex('Alice');
-        expect(graph.adjacencyList['Alice']).toEqual(['The Duchess']);
-        expect(graph.adjacencyList['The Duchess']).toEqual(['Alice']);
+        expect(graph.adjacencyList['Alice'].map(edge => edge.target)).toEqual(['The Duchess']);
+        expect(graph.adjacencyList['The Duchess'].map(edge => edge.target)).toEqual(['Alice']);
     });
     test('can remove edge between two vertices', () => {
         graph.addVertex('Alice');
         graph.addVertex('Cheshire Cat');
         graph.addEdge('Alice', 'Cheshire Cat');
         expect(typeof graph.removeEdge('Alice', 'Cheshire Cat')).toBe('object');
-        expect(graph.adjacencyList['Alice']).toEqual([]);
-        expect(graph.adjacencyList['Cheshire Cat']).toEqual([]);
+        expect(graph.adjacencyList['Alice'].map(edge => edge.target)).toEqual([]);
+        expect(graph.adjacencyList['Cheshire Cat'].map(edge => edge.target)).toEqual([]);
     });
     test('can remove vertex successfully', () => {
         populateGraph(graph);
         expect(typeof graph.removeVertex('Alice')).toBe('object');
         expect(graph.adjacencyList['Alice']).toBeUndefined();
-        expect(graph.adjacencyList['Cheshire Cat']).toEqual([]);
-        expect(graph.adjacencyList['Mad Hatter']).toEqual(['March Hare', 'Dormouse', 'Time']);
-        expect(graph.adjacencyList['March Hare']).toEqual(['Mad Hatter', 'Dormouse']);
-        expect(graph.adjacencyList['Dormouse']).toEqual(['Mad Hatter', 'March Hare']);
+        expect(graph.adjacencyList['Cheshire Cat'].map(edge => edge.target)).toEqual([]);
+        expect(graph.adjacencyList['Mad Hatter'].map(edge => edge.target)).toEqual(['March Hare', 'Dormouse', 'Time']);
+        expect(graph.adjacencyList['March Hare'].map(edge => edge.target)).toEqual(['Mad Hatter', 'Dormouse']);
+        expect(graph.adjacencyList['Dormouse'].map(edge => edge.target)).toEqual(['Mad Hatter', 'March Hare']);
     });
     test('can remove multiple vertices by key[] with removeVertices method', () => {
         populateGraph(graph);
         graph.removeVertices(['Dormouse', 'Mad Hatter', 'March Hare']);
-        expect(graph.adjacencyList).toEqual({
-            "Alice": ["Cheshire Cat"],
-            "Cheshire Cat": ["Alice"], "Time": []
-        });
+        expect(graph.adjacencyList).toEqual({ "Alice": [{ "target": "Cheshire Cat" }], "Cheshire Cat": [{ "target": "Alice" }], "Time": [] });
         expect(graph.vertices).toEqual({
             "Alice": { "key": "Alice", "value": null },
             "Cheshire Cat": { "key": "Cheshire Cat", "value": null },
@@ -139,8 +136,8 @@ describe(`can pass in array values to graph's crud methods`, () => {
     test('can pass string array to addVertices and get proper result', () => {
         graph.addVertices(['Alice', 'The Duck', 'The Lory', 'The Eaglet']);
         expect(graph.adjacencyList).toEqual({
-            "Alice": [], "The Duck": [],
-            "The Eaglet": [], "The Lory": []
+            "Alice": [], "The Duck": [], "The Eaglet": [],
+            "The Lory": []
         });
         expect(graph.vertices).toEqual({
             "Alice": { "key": "Alice", "value": null },
@@ -156,20 +153,24 @@ describe(`can pass in array values to graph's crud methods`, () => {
         graph = new Graph_1.default({ direction: 'bi' }, [{ key: 'Alice', value: "Curiouser and curiouser!" },
             { key: 'The Eaglet', value: "Speak English!" },
             { key: 'The Dodo', value: "The best way to explain it is to do it." }]);
-        graph.addEdges([['Alice', 'The Eaglet'], ['Alice', 'The Dodo'], ['The Eaglet', 'The Dodo']]);
+        graph.addEdges([{ from: 'Alice', to: 'The Eaglet' }, { from: 'Alice', to: 'The Dodo' },
+            { from: 'The Eaglet', to: 'The Dodo' }]);
         expect(graph.adjacencyList).toEqual({
-            "Alice": ["The Eaglet", "The Dodo"],
-            "The Dodo": ["Alice", "The Eaglet"], "The Eaglet": ["Alice", "The Dodo"]
+            "Alice": [{ "target": "The Eaglet" },
+                { "target": "The Dodo" }], "The Dodo": [{ "target": "Alice" },
+                { "target": "The Eaglet" }], "The Eaglet": [{ "target": "Alice" },
+                { "target": "The Dodo" }]
         });
     });
     test('monodirectional graph: can pass string array to addEdges, which it will interpret as a tuple: [fromKey, toKey]', () => {
         graph = new Graph_1.default({ direction: 'mono' }, [{ key: 'Alice', value: "Curiouser and curiouser!" },
             { key: 'The Eaglet', value: "Speak English!" },
             { key: 'The Dodo', value: "The best way to explain it is to do it." }]);
-        graph.addEdges([['Alice', 'The Eaglet'], ['Alice', 'The Dodo'], ['The Eaglet', 'The Dodo']]);
+        graph.addEdges([{ from: 'Alice', to: 'The Eaglet' }, { from: 'Alice', to: 'The Dodo' },
+            { from: 'The Eaglet', to: 'The Dodo' }]);
         expect(graph.adjacencyList).toEqual({
-            "Alice": ["The Eaglet", "The Dodo"],
-            "The Dodo": [], "The Eaglet": ["The Dodo"]
+            "Alice": [{ "target": "The Eaglet" },
+                { "target": "The Dodo" }], "The Dodo": [], "The Eaglet": [{ "target": "The Dodo" }]
         });
     });
 });
@@ -211,5 +212,24 @@ describe('breadth first search implementation', () => {
         expect(results).toEqual(['Time', 'Mad Hatter', 'Alice', 'March Hare',
             'Dormouse', 'Cheshire Cat']);
         // n.b. cheshire cat comes last as it has a distance of 2
+    });
+});
+describe(`Dijkstra's shortest path algorithm`, () => {
+    test('dijkstra exists as a method', () => {
+        expect(typeof graph.dijkstra).toBe('function');
+    });
+    test('dijkstras works with a basic bi-directional graph', () => {
+        try {
+            populateGraph(graph);
+        }
+        catch (e) {
+            expect(e.message).toBe(`ReferenceError: cannot find required property 'weight' on the graph's edges.`);
+        }
+    });
+    test('can find shortest path with dijkstra', () => {
+        graph.addVertices(['A', 'B', 'C', 'D', 'E', 'F']);
+        graph.addEdges([{ from: 'A', to: 'B', weight: 4 }, { from: 'A', to: 'C', weight: 2 }, { from: 'C', to: 'D', weight: 2 }, { from: 'C', to: 'F', weight: 4 }, { from: 'F', to: 'E', weight: 1 }, { from: 'D', to: 'E', weight: 3 }, { from: 'D', to: 'F', weight: 1 }, { from: 'B', to: 'E', weight: 3 }]);
+        const shortestPath = graph.dijkstra('A', 'E');
+        expect(shortestPath).toEqual({ "distance": 6, "route": ["A", "C", "D", "F", "E"] });
     });
 });
