@@ -35,7 +35,7 @@ describe('basic graph functionality', () => {
   test('add vertex method exists', () => {
     expect(typeof graph.addVertex).toBe('function');
   });
-  test('can add vertex and it will appear as a key value pair in the adjacency list, with edges value initialized as empty array', () => {
+  test(`can add vertex and it will appear as a key value pair in the adjacency list, with edges value initialized as empty array`, () => {
     graph.addVertex('Alice');
     expect(graph.adjacencyList['Alice']).toEqual([]);
   });
@@ -55,7 +55,7 @@ describe('basic graph functionality', () => {
     expect(graph.addEdge('Alice', 'Cheshire Cat')).toBeNull(); // Cheshire cat still invisible
     graph.addVertex('Cheshire Cat'); // appears!
     expect(typeof graph.addEdge('Alice', 'Cheshire Cat')).toBe('object');
-  })
+  });
   test('adding a vertex using existing key name will return the existing list of edges', () => {
     graph.addVertex('Alice');
     graph.addVertex('The Duchess');
@@ -81,6 +81,97 @@ describe('basic graph functionality', () => {
     expect(graph.adjacencyList['March Hare']).toEqual(['Mad Hatter', 'Dormouse']);
     expect(graph.adjacencyList['Dormouse']).toEqual(['Mad Hatter', 'March Hare'])
   });
+  test('can remove multiple vertices by key[] with removeVertices method', () => {
+    populateGraph(graph);
+    graph.removeVertices(['Dormouse', 'Mad Hatter', 'March Hare']);
+    expect(graph.adjacencyList).toEqual({
+      "Alice": ["Cheshire Cat"],
+      "Cheshire Cat": ["Alice"], "Time": []
+    });
+    expect(graph.vertices).toEqual({
+      "Alice": { "key": "Alice", "value": null },
+      "Cheshire Cat": { "key": "Cheshire Cat", "value": null },
+      "Time": { "key": "Time", "value": null }
+    });
+  });
+  test('removing a non-existent key from graph throws reference error', () => {
+    populateGraph(graph);
+    try {
+      graph.removeVertex('White Rabbit');
+    } catch (e) {
+      expect(typeof e).toEqual('object');
+      expect(e.message).toBe("Key: White Rabbit does not exist as a vertex.");
+    }
+    try {
+      graph.removeVertices(['White Rabbit', 'Queen of Hearts']);
+    } catch (e) {
+      expect(typeof e).toEqual('object');
+      expect(e.message).toBe("Key: White Rabbit does not exist as a vertex.");
+    }
+  })
+});
+
+describe(`can pass in array values to graph's crud methods`, () => {
+  test('can initiate a graph with values by passing string[] to constructor', () => {
+    graph = new Graph({ direction: 'bi' }, ['Alice', 'The Caterpillar', 'The Cheshire Cat']);
+    expect(graph.adjacencyList).toEqual({ "Alice": [], "The Caterpillar": [], "The Cheshire Cat": [] });
+    expect(graph.vertices).toEqual({
+      "Alice": { "key": "Alice", "value": null },
+      "The Caterpillar": { "key": "The Caterpillar", "value": null },
+      "The Cheshire Cat": { "key": "The Cheshire Cat", "value": null }
+    });
+  });
+  test('can initiate a graph with values by passing vertex[] to constructor', () => {
+    graph = new Graph({ direction: 'bi' }, [{ key: 'Alice', value: "Curiouser and curiouser!" },
+    { key: 'The Eaglet', value: "Speak English!" },
+    { key: 'The Dodo', value: "The best way to explain it is to do it." }]);
+    expect(graph.adjacencyList).toEqual({ "Alice": [], "The Dodo": [], "The Eaglet": [] });
+    expect(graph.vertices).toEqual({
+      "Alice": { "key": "Alice", "value": "Curiouser and curiouser!" },
+      "The Dodo": { "key": "The Dodo", "value": "The best way to explain it is to do it." },
+      "The Eaglet": { "key": "The Eaglet", "value": "Speak English!" }
+    });
+  });
+  test('addVertices method exists', () => {
+    expect(typeof graph.addVertices).toBe('function');
+  });
+  test('can pass string array to addVertices and get proper result', () => {
+    graph.addVertices(['Alice', 'The Duck', 'The Lory', 'The Eaglet']);
+    expect(graph.adjacencyList).toEqual({
+      "Alice": [], "The Duck": [],
+      "The Eaglet": [], "The Lory": []
+    });
+    expect(graph.vertices).toEqual({
+      "Alice": { "key": "Alice", "value": null },
+      "The Duck": { "key": "The Duck", "value": null },
+      "The Eaglet": { "key": "The Eaglet", "value": null },
+      "The Lory": { "key": "The Lory", "value": null }
+    });
+  });
+
+  test('addEdges method exists', () => {
+    expect(typeof graph.addEdges).toBe('function');
+  });
+  test('bidirectional graph: can pass string array to addEdges, which it will interpret as a tuple: [fromKey, toKey]', () => {
+    graph = new Graph({ direction: 'bi' }, [{ key: 'Alice', value: "Curiouser and curiouser!" },
+    { key: 'The Eaglet', value: "Speak English!" },
+    { key: 'The Dodo', value: "The best way to explain it is to do it." }]);
+    graph.addEdges([['Alice', 'The Eaglet'], ['Alice', 'The Dodo'], ['The Eaglet', 'The Dodo']]);
+    expect(graph.adjacencyList).toEqual({
+      "Alice": ["The Eaglet", "The Dodo"],
+      "The Dodo": ["Alice", "The Eaglet"], "The Eaglet": ["Alice", "The Dodo"]
+    });
+  });
+  test('monodirectional graph: can pass string array to addEdges, which it will interpret as a tuple: [fromKey, toKey]', () => {
+    graph = new Graph({ direction: 'mono' }, [{ key: 'Alice', value: "Curiouser and curiouser!" },
+    { key: 'The Eaglet', value: "Speak English!" },
+    { key: 'The Dodo', value: "The best way to explain it is to do it." }]);
+    graph.addEdges([['Alice', 'The Eaglet'], ['Alice', 'The Dodo'], ['The Eaglet', 'The Dodo']]);
+    expect(graph.adjacencyList).toEqual({
+      "Alice": ["The Eaglet", "The Dodo"],
+      "The Dodo": [], "The Eaglet": ["The Dodo"]
+    });
+  })
 });
 
 describe('depth first traversal of graphs', () => {

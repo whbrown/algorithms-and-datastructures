@@ -10,18 +10,35 @@ const Queue_1 = __importDefault(require("./Queue"));
 ;
 ;
 class Graph {
-    constructor() {
-        this.addVertex = (name, value = null) => {
-            const vertex = { key: name, value: value };
-            if (!this.adjacencyList[name])
-                this.adjacencyList[name] = [];
-            if (!this.vertices[name])
-                this.vertices[name] = vertex;
-            return this.adjacencyList[name];
+    constructor(options = { direction: 'bi' }, vertices) {
+        this.addVertex = (key, value = null) => {
+            const vertex = { key: key, value: value };
+            if (!this.adjacencyList[key])
+                this.adjacencyList[key] = [];
+            if (!this.vertices[key])
+                this.vertices[key] = vertex;
+            return this.adjacencyList[key];
         };
-        this.addEdge = (firstKey, secondKey, options = { direction: 'bi' }) => {
+        this.addVertices = (vertices) => {
+            switch (typeof vertices[0]) {
+                case 'string':
+                    for (let v of vertices) {
+                        this.addVertex(v);
+                    }
+                    break;
+                case 'object':
+                    for (let v of vertices) {
+                        let { key, value } = v;
+                        this.addVertex(key, value);
+                    }
+                    break;
+                default:
+                    throw new TypeError('Incorrect type passed for vertices array. Try a key string or vertex object');
+            }
+        };
+        this.addEdge = (firstKey, secondKey) => {
             // bidirectional
-            const { direction } = options;
+            const { direction } = this.options;
             if (!this.adjacencyList[firstKey] || !this.adjacencyList[secondKey]) {
                 return null; // maybe throw error instead?
             }
@@ -33,8 +50,11 @@ class Graph {
             }
             return this.adjacencyList;
         };
-        this.removeEdge = (firstKey, secondKey, options = { direction: 'bi' }) => {
-            const { direction } = options;
+        this.addEdges = (edges) => {
+            edges.forEach(([fromKey, toKey]) => this.addEdge(fromKey, toKey));
+        };
+        this.removeEdge = (firstKey, secondKey) => {
+            const { direction } = this.options;
             const firstEdge = this.adjacencyList[firstKey].findIndex((key) => key === secondKey);
             if (firstEdge !== -1) {
                 this.adjacencyList[firstKey].splice(firstEdge, 1);
@@ -47,10 +67,10 @@ class Graph {
             }
             return this.adjacencyList;
         };
-        this.removeVertex = (key, options = { direction: 'bi' }) => {
+        this.removeVertex = (key) => {
             if (this.adjacencyList[key] === undefined)
-                return null;
-            const { direction } = options;
+                throw new ReferenceError(`Key: ${key} does not exist as a vertex.`);
+            const { direction } = this.options;
             if (direction === 'bi') {
                 for (let edge of this.adjacencyList[key]) {
                     this.adjacencyList[edge] = this.adjacencyList[edge].filter(v => v !== key);
@@ -64,6 +84,13 @@ class Graph {
                 }
             }
             delete this.adjacencyList[key];
+            delete this.vertices[key];
+            return this.adjacencyList;
+        };
+        this.removeVertices = (keys) => {
+            for (let key of keys) {
+                this.removeVertex(key);
+            }
             return this.adjacencyList;
         };
         this.depthFirstTraversal = (startKey, map = v => v) => {
@@ -132,7 +159,25 @@ class Graph {
         };
         this.adjacencyList = {};
         this.vertices = {};
-        // TODO: change directional to boolean and have it be set in constructor
+        this.options = options;
+        if (vertices) {
+            switch (typeof vertices[0]) {
+                case 'string':
+                    for (let v of vertices) {
+                        this.addVertex(v);
+                    }
+                    break;
+                case 'object':
+                    for (let v of vertices) {
+                        let { key, value } = v;
+                        this.addVertex(key, value);
+                    }
+                    break;
+                default:
+                    throw new TypeError('Incorrect type passed for vertices array. Try a key string or vertex object');
+            }
+        }
     }
+    ;
 }
 exports.default = Graph;
