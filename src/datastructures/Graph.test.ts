@@ -84,10 +84,10 @@ describe('basic graph functionality', () => {
 });
 
 describe('depth first traversal of graphs', () => {
-  test('dfs method exists', () => {
+  test('DFS method exists', () => {
     expect(typeof graph.depthFirstTraversal).toBe('function');
   });
-  test('dfs method returns array of all connected vertices', () => {
+  test('DFS method returns array of all connected vertices', () => {
     populateGraph(graph);
     let results = graph.depthFirstTraversal('Alice');
     expect(results).toEqual(["Alice", "Cheshire Cat", "Mad Hatter", "March Hare", "Dormouse", "Time"]);
@@ -97,7 +97,7 @@ describe('depth first traversal of graphs', () => {
 });
 
 describe('iterative implementation of DFS', () => {
-  test('iterative dfs method exists', () => {
+  test('iterative DFS method exists', () => {
     expect(typeof graph.iterativeDFS).toBe('function')
   });
   test('iterative dfs method returns array of all connected vertices in proper order', () => {
@@ -107,4 +107,21 @@ describe('iterative implementation of DFS', () => {
     results = graph.iterativeDFS('Time'); // different route
     expect(results).toEqual(["Time", "Mad Hatter", "Dormouse", "March Hare", "Alice", "Cheshire Cat"]);
   });
-})
+});
+
+describe('breadth first search implementation', () => {
+  test('BFS method exists', () => {
+    expect(typeof graph.breathFirstTraversal).toBe('function')
+  });
+  test('breath first search returns array of all connected vertices in proper order', () => {
+    populateGraph(graph);
+    let results = graph.breathFirstTraversal('Alice');
+    expect(results).toEqual(['Alice', 'Cheshire Cat', 'Mad Hatter',
+      'March Hare', 'Dormouse', 'Time']);
+    // n.b. time comes last as it has a distance of 2
+    results = graph.breathFirstTraversal('Time');
+    expect(results).toEqual(['Time', 'Mad Hatter', 'Alice', 'March Hare',
+      'Dormouse', 'Cheshire Cat']);
+    // n.b. cheshire cat comes last as it has a distance of 2
+  });
+});

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Stack_1 = __importDefault(require("./Stack"));
+const Queue_1 = __importDefault(require("./Queue"));
 ;
 ;
 ;
@@ -94,6 +95,28 @@ class Graph {
                     for (let neighbour of this.adjacencyList[vertex]) {
                         if (!visited[neighbour]) {
                             stack.push(neighbour);
+                        }
+                    }
+                }
+            }
+            return results;
+        };
+        this.breathFirstTraversal = (startingVertex, map = v => v) => {
+            let results = [];
+            if (!startingVertex)
+                return null;
+            const queue = new Queue_1.default();
+            const visited = { [startingVertex]: true };
+            queue.enqueue(startingVertex);
+            let dequeuedNode;
+            while (queue.length) {
+                dequeuedNode = queue.dequeue();
+                if (dequeuedNode) {
+                    results.push(map(dequeuedNode.data));
+                    for (let neighbour of this.adjacencyList[dequeuedNode.data]) {
+                        if (!visited[neighbour]) {
+                            visited[neighbour] = true;
+                            queue.enqueue(neighbour);
                         }
                     }
                 }

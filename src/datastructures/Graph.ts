@@ -1,4 +1,5 @@
 import Stack from './Stack';
+import Queue from './Queue';
 import _Node from './Node';
 
 type vertex = string;
@@ -89,7 +90,7 @@ class Graph {
     }
     helper(vertex);
     return results;
-  }
+  };
 
   iterativeDFS = (startingVertex: vertex, map: (vertex: vertex) => unknown = v => v): unknown[] => {
     let stack = new Stack<string>();
@@ -111,6 +112,28 @@ class Graph {
       }
     }
     return results;
-  }
+  };
+
+  breathFirstTraversal = (startingVertex: vertex, map: (vertex: vertex) => unknown = v => v): unknown[] | null => {
+    let results: unknown[] = [];
+    if (!startingVertex) return null;
+    const queue = new Queue<vertex>()
+    const visited: { [vertex: string]: boolean } = { [startingVertex]: true };
+    queue.enqueue(startingVertex);
+    let dequeuedNode;
+    while (queue.length) {
+      dequeuedNode = queue.dequeue();
+      if (dequeuedNode) {
+        results.push(map(dequeuedNode.data));
+        for (let neighbour of this.adjacencyList[dequeuedNode.data]) {
+          if (!visited[neighbour]) {
+            visited[neighbour] = true;
+            queue.enqueue(neighbour);
+          }
+        }
+      }
+    }
+    return results;
+  };
 }
 export default Graph;
