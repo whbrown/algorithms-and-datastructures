@@ -1,4 +1,4 @@
-import Graph from './Graph';
+import Graph, { vertex } from './Graph';
 
 let graph = new Graph();
 beforeEach(() => {
@@ -89,9 +89,9 @@ describe('depth first traversal of graphs', () => {
   });
   test('DFS method returns array of all connected vertices', () => {
     populateGraph(graph);
-    let results = graph.depthFirstTraversal('Alice');
+    let results = graph.depthFirstTraversal('Alice', (v) => v.key);
     expect(results).toEqual(["Alice", "Cheshire Cat", "Mad Hatter", "March Hare", "Dormouse", "Time"]);
-    results = graph.depthFirstTraversal('Time'); // different route
+    results = graph.depthFirstTraversal('Time', (v) => v.key); // different route
     expect(results).toEqual(["Time", "Mad Hatter", "Alice", "Cheshire Cat", "March Hare", "Dormouse"]);
   });
 });
@@ -102,9 +102,9 @@ describe('iterative implementation of DFS', () => {
   });
   test('iterative dfs method returns array of all connected vertices in proper order', () => {
     populateGraph(graph);
-    let results = graph.iterativeDFS('Alice');
+    let results = graph.iterativeDFS('Alice', v => v.key);
     expect(results).toEqual(["Alice", "Dormouse", "March Hare", "Mad Hatter", "Time", "Cheshire Cat"]);
-    results = graph.iterativeDFS('Time'); // different route
+    results = graph.iterativeDFS('Time', v => v.key); // different route
     expect(results).toEqual(["Time", "Mad Hatter", "Dormouse", "March Hare", "Alice", "Cheshire Cat"]);
   });
 });
@@ -115,11 +115,11 @@ describe('breadth first search implementation', () => {
   });
   test('breath first search returns array of all connected vertices in proper order', () => {
     populateGraph(graph);
-    let results = graph.breathFirstTraversal('Alice');
+    let results = graph.breathFirstTraversal('Alice', v => v.key);
     expect(results).toEqual(['Alice', 'Cheshire Cat', 'Mad Hatter',
       'March Hare', 'Dormouse', 'Time']);
     // n.b. time comes last as it has a distance of 2
-    results = graph.breathFirstTraversal('Time');
+    results = graph.breathFirstTraversal('Time', v => v.key);
     expect(results).toEqual(['Time', 'Mad Hatter', 'Alice', 'March Hare',
       'Dormouse', 'Cheshire Cat']);
     // n.b. cheshire cat comes last as it has a distance of 2
