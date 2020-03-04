@@ -1,21 +1,31 @@
+import Stack from './Stack';
+import _Node from './Node';
+
+type vertex = string;
+type edge = string;
+
 interface Graph {
-  adjacencyList: { [vertex: string]: string[] /* edges[] */ }
+  adjacencyList: AdjacencyList;
   // might be better to use a set instead of array to keep track of edges
-}
+};
+interface AdjacencyList { [vertex: string]: edge[] };
 
 interface GraphOptions {
   direction: 'mono' | 'bi'; // mono- and bi-directionality of edge connection
-}
+};
+
 
 class Graph {
   constructor() {
     this.adjacencyList = {}
+    // TODO: change directional to boolean and have it be set in constructor
   }
-  addVertex = (name: string): string[] => {
+  addVertex = (name: vertex): edge[] => {
     if (!this.adjacencyList[name]) this.adjacencyList[name] = [];
     return this.adjacencyList[name];
   };
-  addEdge = (firstVertex: string, secondVertex: string, options: GraphOptions = { direction: 'bi' }): { [vertex: string]: string[] } | null => {
+  addEdge = (firstVertex: vertex, secondVertex: vertex,
+    options: GraphOptions = { direction: 'bi' }): AdjacencyList | null => {
     // bidirectional
     const { direction } = options;
     if (!this.adjacencyList[firstVertex] || !this.adjacencyList[secondVertex]) {
@@ -29,7 +39,8 @@ class Graph {
     }
     return this.adjacencyList;
   };
-  removeEdge = (firstVertex: string, secondVertex: string, options: GraphOptions = { direction: 'bi' }): { [vertex: string]: string[] } | null => {
+  removeEdge = (firstVertex: vertex, secondVertex: vertex,
+    options: GraphOptions = { direction: 'bi' }): AdjacencyList | null => {
     const { direction } = options;
     const firstEdge = this.adjacencyList[firstVertex].findIndex((edge) => edge === secondVertex);
     if (firstEdge !== -1) {
@@ -43,17 +54,63 @@ class Graph {
     }
     return this.adjacencyList;
   }
-  removeVertex = (vertex: string, options: GraphOptions = { direction: 'bi' }): { [vertex: string]: string[] } | null => {
+  removeVertex = (vertex: vertex, options: GraphOptions = { direction: 'bi' }): AdjacencyList | null => {
     if (this.adjacencyList[vertex] === undefined) return null;
     const { direction } = options;
     if (direction === 'bi') {
       for (let edge of this.adjacencyList[vertex]) {
         this.adjacencyList[edge] = this.adjacencyList[edge].filter(v => v !== vertex);
       }
-      delete this.adjacencyList[vertex];
     }
+    else if (direction === 'mono') {
+      /* have to iterate over every vertex to delete any mono-directional 
+         references to the removed vertex */
+      for (let edge of Object.keys(this.adjacencyList)) {
+        this.adjacencyList[edge] = this.adjacencyList[edge].filter(v => v !== vertex);
+      }
+    }
+    delete this.adjacencyList[vertex];
     return this.adjacencyList;
   }
-}
 
+  depthFirstTraversal = (vertex: vertex, map: (vertex: vertex) => unknown = v => v): unknown[] => {
+    // takes a starting vertex, and a map function to call on each vertex
+    const visited: { [vertex: string]: boolean } = {};
+    const results: unknown[] = [];
+    const helper = (vertex: vertex): void => {
+      if (!this.adjacencyList[vertex]) return;
+      results.push(map(vertex));
+      visited[vertex] = true;
+      for (let neighbour of this.adjacencyList[vertex]) {
+        if (!visited[neighbour]) {
+          helper(neighbour);
+        }
+      }
+    }
+    helper(vertex);
+    return results;
+  }
+
+  iterativeDFS = (startingVertex: vertex, map: (vertex: vertex) => unknown = v => v): unknown[] => {
+    let stack = new Stack<string>();
+    let results: unknown[] = [];
+    const visited: { [vertex: string]: boolean } = {};
+    stack.push(startingVertex);
+    while (stack.length > 0) {
+      // @ts-ignore // ignore typescript concern that stack.pop will return 
+      // void (only happens if stack.size === 0, avoided by while loop)
+      let vertex: vertex = stack.pop().data;
+      if (!visited[vertex]) {
+        visited[vertex] = true;
+        results.push(map(vertex));
+        for (let neighbour of this.adjacencyList[vertex]) {
+          if (!visited[neighbour]) {
+            stack.push(neighbour);
+          }
+        }
+      }
+    }
+    return results;
+  }
+}
 export default Graph;

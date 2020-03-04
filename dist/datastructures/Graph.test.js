@@ -21,6 +21,9 @@ const populateGraph = (graph) => {
     graph.addEdge('Mad Hatter', 'March Hare');
     graph.addEdge('Mad Hatter', 'Dormouse');
     graph.addEdge('March Hare', 'Dormouse');
+    graph.addVertex('Time');
+    graph.addEdge('Mad Hatter', 'Time'); /* `If you knew Time as well as I do,' said the Hatter,
+    `you wouldn't talk about wasting it. It's him.' */
 };
 describe('basic graph functionality', () => {
     test('graph class exists', () => {
@@ -74,8 +77,32 @@ describe('basic graph functionality', () => {
         expect(typeof graph.removeVertex('Alice')).toBe('object');
         expect(graph.adjacencyList['Alice']).toBeUndefined();
         expect(graph.adjacencyList['Cheshire Cat']).toEqual([]);
-        expect(graph.adjacencyList['Mad Hatter']).toEqual(['March Hare', 'Dormouse']);
+        expect(graph.adjacencyList['Mad Hatter']).toEqual(['March Hare', 'Dormouse', 'Time']);
         expect(graph.adjacencyList['March Hare']).toEqual(['Mad Hatter', 'Dormouse']);
         expect(graph.adjacencyList['Dormouse']).toEqual(['Mad Hatter', 'March Hare']);
+    });
+});
+describe('depth first traversal of graphs', () => {
+    test('dfs method exists', () => {
+        expect(typeof graph.depthFirstTraversal).toBe('function');
+    });
+    test('dfs method returns array of all connected vertices', () => {
+        populateGraph(graph);
+        let results = graph.depthFirstTraversal('Alice');
+        expect(results).toEqual(["Alice", "Cheshire Cat", "Mad Hatter", "March Hare", "Dormouse", "Time"]);
+        results = graph.depthFirstTraversal('Time'); // different route
+        expect(results).toEqual(["Time", "Mad Hatter", "Alice", "Cheshire Cat", "March Hare", "Dormouse"]);
+    });
+});
+describe('iterative implementation of DFS', () => {
+    test('iterative dfs method exists', () => {
+        expect(typeof graph.iterativeDFS).toBe('function');
+    });
+    test('iterative dfs method returns array of all connected vertices in proper order', () => {
+        populateGraph(graph);
+        let results = graph.iterativeDFS('Alice');
+        expect(results).toEqual(["Alice", "Dormouse", "March Hare", "Mad Hatter", "Time", "Cheshire Cat"]);
+        results = graph.iterativeDFS('Time'); // different route
+        expect(results).toEqual(["Time", "Mad Hatter", "Dormouse", "March Hare", "Alice", "Cheshire Cat"]);
     });
 });
