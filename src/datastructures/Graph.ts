@@ -160,8 +160,9 @@ class Graph {
     const visited: { [key: string]: boolean } = {};
     stack.push(startKey);
     while (stack.length > 0) {
-      // @ts-ignore // ignore typescript concern that stack.pop will return 
-      // void (only happens if stack.size === 0, avoided by while loop)
+      // @ts-ignore // ignore typescript error (ts2339) where stack.pop will 
+      // return void (only happens if stack.size === 0, avoided by while
+      // condition)
       let vertex: string = stack.pop().data;
       if (!visited[vertex]) {
         visited[vertex] = true;
