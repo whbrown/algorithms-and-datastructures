@@ -9,7 +9,11 @@ describe('basic hash table', () => {
   });
   test('hash fn takes string and returns number between 0 and specified max', () => {
     const max = 50;
-    expect(HT.hash('test', max)).toBeLessThan(50);
+    let str = '';
+    for (let i = 0; i < 100; i++) {
+      str += String.fromCharCode(Math.floor(Math.random() * (200 - 1) + 1));
+    }
+    expect(HT.hash(str, max)).toBeLessThan(50);
   });
   test('hash fn throws error if max argument is <= 0', () => {
     let max = 0;
