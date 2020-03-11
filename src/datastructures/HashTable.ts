@@ -22,6 +22,13 @@ class HashTable {
     }
     this.keyMap[index].push([key, value]);
   }
+
+  get = (soughtKey: string) => {
+    let index = this.hash(soughtKey);
+    if (this.keyMap[index]) {
+      return this.keyMap[index].find(([key]) => soughtKey === key);
+    }
+  }
 }
 
 export default HashTable;
