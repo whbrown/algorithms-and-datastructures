@@ -1,4 +1,3 @@
-
 pub fn sum_up_to(num: usize) -> usize {
     (0..=num).into_iter().fold(0, |acc, n| acc + n)
 }
@@ -72,21 +71,17 @@ pub fn max_n_width_sub_array_sum(nums: &[isize], n: usize) -> Option<isize> {
     if nums.len() < n {
         return None;
     }
-    let mut max_sum: Option<isize> = None;
-    let mut j = n;
+    let mut sum = sum_nums(&nums[0..n]);
+    let mut max_sum = sum;
     for (i, _) in nums.iter().enumerate() {
-        if i + n <= nums.len() {
-            let sum = sum_nums(&nums[i..j]);
-            match max_sum {
-                Some(s) => {
-                    if sum > s {
-                        max_sum = Some(sum);
-                    }
-                },
-                None => max_sum = Some(sum)
+        if i > 0 && i + n <= nums.len() {
+            sum -= nums[i - 1];
+            sum += nums[i + n - 1];
+
+            if sum > max_sum {
+                max_sum = sum
             }
-            j += 1;
         }
     }
-    max_sum
+    Some(max_sum)
 }
