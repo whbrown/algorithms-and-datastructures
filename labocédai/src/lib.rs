@@ -1,5 +1,6 @@
 pub mod simple_challenges;
 pub mod recursion;
+pub mod search;
 
 #[cfg(test)]
 mod tests {
@@ -102,6 +103,31 @@ mod tests {
             assert_eq!(fibonacci(10), 55);
             assert_eq!(fibonacci(28), 317811);
             assert_eq!(fibonacci(35), 9227465);
+        }
+
+        #[test]
+        fn test_reverse() {
+            assert_eq!(reverse("abcdef"), "fedcba");
+            assert_eq!(reverse("test"), "tset");
+            assert_eq!(reverse(""), "");
+        }
+    }
+
+    mod search {
+        use crate::search::*;
+
+        #[test]
+        fn test_linear_search() {
+            assert_eq!(linear_search(&[7, 4, 3, 1, 5], 3), 2);
+            assert_eq!(linear_search(&[5, 3, 2, 3, 4, 5], 6), -1);
+            assert_eq!(linear_search(&[], 6), -1);
+        }
+
+        #[test]
+        fn test_binary_search_nums() {
+            assert_eq!(binary_search_nums(&[1, 2, 3, 4, 5], 3), 2);
+            assert_eq!(binary_search_nums(&[1, 2, 3, 3, 4, 5], 6), -1);
+            assert_eq!(binary_search_nums(&[], 6), -1);
         }
     }
 }

@@ -37,3 +37,14 @@ pub fn fibonacci(n: usize) -> usize {
     }
     fibonacci(n - 1) + fibonacci(n - 2)
 }
+
+pub fn reverse(s: &str) -> String {
+    if s.len() == 0 {
+        return s.to_owned();
+    }
+    let char = match s.chars().nth(0) {
+        Some(c) => c.to_string(),
+        None => "".to_string()
+    };
+    return reverse(&s[1..s.len()]) + &char
+}
