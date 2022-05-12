@@ -1,6 +1,7 @@
-pub mod simple_challenges;
 pub mod recursion;
 pub mod search;
+pub mod simple_challenges;
+pub mod sort;
 
 #[cfg(test)]
 mod tests {
@@ -125,9 +126,51 @@ mod tests {
 
         #[test]
         fn test_binary_search_nums() {
-            assert_eq!(binary_search_nums(&[1, 2, 3, 4, 5], 3), 2);
+            assert_eq!(binary_search_nums(&[1, 2, 3, 4, 5], 1), 0);
             assert_eq!(binary_search_nums(&[1, 2, 3, 3, 4, 5], 6), -1);
+            assert_eq!(binary_search_nums(&[3, 3, 3, 4, 5, 5, 6], 6), 6);
+            assert_eq!(binary_search_nums(&[3, 3, 3, 4, 5, 5, 5, 6], 6), 7);
             assert_eq!(binary_search_nums(&[], 6), -1);
+        }
+    }
+
+    mod sort {
+        use crate::sort::*;
+
+        #[test]
+        fn test_bubble_sort() {
+            assert_eq!(
+                bubble_sort(&mut [29, 10, 14, 30, 37, 14, 18]),
+                [10, 14, 14, 18, 29, 30, 37]
+            );
+            assert_eq!(bubble_sort(&mut []), []);
+            assert_eq!(bubble_sort(&mut [1, 1, 1, 2, 1]), [1, 1, 1, 1, 2]);
+            assert_eq!(bubble_sort(&mut [2, 1, 1, 1, 2]), [1, 1, 1, 2, 2]);
+            assert_eq!(bubble_sort(&mut [1]), [1]);
+        }
+
+        #[test]
+        fn test_selection_sort() {
+            assert_eq!(
+                selection_sort(&mut [29, 10, 14, 30, 37, 14, 18]),
+                [10, 14, 14, 18, 29, 30, 37]
+            );
+            assert_eq!(selection_sort(&mut []), []);
+            assert_eq!(selection_sort(&mut [1, 1, 1, 2, 1]), [1, 1, 1, 1, 2]);
+            assert_eq!(selection_sort(&mut [2, 1, 1, 1, 2]), [1, 1, 1, 2, 2]);
+            assert_eq!(selection_sort(&mut [1]), [1]);
+        }
+
+        #[test]
+        fn test_insertion_sort() {
+            assert_eq!(
+                insertion_sort(&mut [29, 10, 14, 30, 37, 14, 18]),
+                [10, 14, 14, 18, 29, 30, 37]
+            );
+            assert_eq!(insertion_sort(&mut []), []);
+            assert_eq!(insertion_sort(&mut [1, 1, 1, 2, 1]), [1, 1, 1, 1, 2]);
+            assert_eq!(insertion_sort(&mut [2, 1, 1, 1, 2]), [1, 1, 1, 2, 2]);
+            assert_eq!(insertion_sort(&mut [1]), [1]);
         }
     }
 }

@@ -44,7 +44,7 @@ pub fn reverse(s: &str) -> String {
     }
     let char = match s.chars().nth(0) {
         Some(c) => c.to_string(),
-        None => "".to_string()
+        None => "".to_string(),
     };
-    return reverse(&s[1..s.len()]) + &char
+    return reverse(&s[1..s.len()]) + &char;
 }
