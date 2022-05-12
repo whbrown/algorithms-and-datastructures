@@ -39,10 +39,10 @@ pub fn fibonacci(n: usize) -> usize {
 }
 
 pub fn reverse(s: &str) -> String {
-    if s.len() == 0 {
+    if s.is_empty() {
         return s.to_owned();
     }
-    let char = match s.chars().nth(0) {
+    let char = match s.chars().next() {
         Some(c) => c.to_string(),
         None => "".to_string(),
     };

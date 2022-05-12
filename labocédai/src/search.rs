@@ -12,7 +12,7 @@ pub fn linear_search(nums: &[isize], target: isize) -> isize {
 pub fn binary_search_nums(nums: &[isize], target: isize) -> isize {
     /* takes a sorted collection of nums and a target number to search for;
     returns the index or -1 if not found */
-    if nums.len() == 0 {
+    if nums.is_empty() {
         return -1;
     }
     let mut left = 0;

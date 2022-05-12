@@ -172,5 +172,12 @@ mod tests {
             assert_eq!(insertion_sort(&mut [2, 1, 1, 1, 2]), [1, 1, 1, 2, 2]);
             assert_eq!(insertion_sort(&mut [1]), [1]);
         }
+
+        #[test]
+        fn test_merge() {
+            assert_eq!(merge(&[1, 2, 3], &[4, 5, 6]), vec![1, 2, 3, 4, 5, 6]);
+            assert_eq!(merge(&[], &[]), vec![]);
+            assert_eq!(merge(&[1, 3, 5], &[2, 4, 6]), vec![1, 2, 3, 4, 5, 6]);
+        }
     }
 }
