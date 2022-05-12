@@ -43,29 +43,38 @@ pub fn insertion_sort(nums: &mut [isize]) -> &mut [isize] {
     nums
 }
 
-pub fn merge(first_arr: &[isize], second_arr: &[isize]) -> Vec<isize> {
+pub fn merge(arr_1: &[isize], arr_2: &[isize]) -> Vec<isize> {
     /* merges two similarly sorted arrays */
-    let mut merged = Vec::with_capacity(first_arr.len() + second_arr.len());
+    let mut merged = Vec::with_capacity(arr_1.len() + arr_2.len());
     let mut i = 0;
     let mut j = 0;
-    while i < first_arr.len() && j < second_arr.len() {
-        if first_arr[i] <= second_arr[j] {
-            merged.push(first_arr[i]);
+    while i < arr_1.len() && j < arr_2.len() {
+        if arr_1[i] <= arr_2[j] {
+            merged.push(arr_1[i]);
             i += 1;
-        } else if first_arr[i] > second_arr[j] {
-            merged.push(second_arr[j]);
+        } else if arr_1[i] > arr_2[j] {
+            merged.push(arr_2[j]);
             j += 1;
         }
     }
     // push remaining values in unexhausted array into merged
-    if i < first_arr.len() {
-        for num in first_arr.iter().skip(i) {
-            merged.push(*num);
-        }
-    } else if j < second_arr.len() {
-        for num in second_arr.iter().skip(j) {
-            merged.push(*num);
-        }
+    while i < arr_1.len() {
+        merged.push(arr_1[i]);
+        i += 1;
+    }
+    while j < arr_2.len() {
+        merged.push(arr_2[j]);
+        j += 1;
     }
     merged
+}
+
+pub fn merge_sort(nums: &[isize]) -> Vec<isize> {
+    if nums.len() <= 1 {
+        return nums.to_vec();
+    }
+    let midpoint = nums.len() / 2;
+    let left = merge_sort(&nums[0..midpoint]);
+    let right = merge_sort(&nums[midpoint..]);
+    merge(&left, &right)
 }

@@ -143,6 +143,10 @@ mod tests {
                 bubble_sort(&mut [29, 10, 14, 30, 37, 14, 18]),
                 [10, 14, 14, 18, 29, 30, 37]
             );
+            assert_eq!(
+                bubble_sort(&mut [-1, -2, 1, 0]),
+                [-2, -1, 0, 1]
+            );
             assert_eq!(bubble_sort(&mut []), []);
             assert_eq!(bubble_sort(&mut [1, 1, 1, 2, 1]), [1, 1, 1, 1, 2]);
             assert_eq!(bubble_sort(&mut [2, 1, 1, 1, 2]), [1, 1, 1, 2, 2]);
@@ -154,6 +158,10 @@ mod tests {
             assert_eq!(
                 selection_sort(&mut [29, 10, 14, 30, 37, 14, 18]),
                 [10, 14, 14, 18, 29, 30, 37]
+            );
+            assert_eq!(
+                selection_sort(&mut [-1, -2, 1, 0]),
+                [-2, -1, 0 ,1]
             );
             assert_eq!(selection_sort(&mut []), []);
             assert_eq!(selection_sort(&mut [1, 1, 1, 2, 1]), [1, 1, 1, 1, 2]);
@@ -167,6 +175,10 @@ mod tests {
                 insertion_sort(&mut [29, 10, 14, 30, 37, 14, 18]),
                 [10, 14, 14, 18, 29, 30, 37]
             );
+            assert_eq!(
+                insertion_sort(&mut [-1, -2, 1, 0]),
+                [-2, -1, 0, 1]
+            );
             assert_eq!(insertion_sort(&mut []), []);
             assert_eq!(insertion_sort(&mut [1, 1, 1, 2, 1]), [1, 1, 1, 1, 2]);
             assert_eq!(insertion_sort(&mut [2, 1, 1, 1, 2]), [1, 1, 1, 2, 2]);
@@ -179,5 +191,22 @@ mod tests {
             assert_eq!(merge(&[], &[]), vec![]);
             assert_eq!(merge(&[1, 3, 5], &[2, 4, 6]), vec![1, 2, 3, 4, 5, 6]);
         }
+
+        #[test]
+        fn test_merge_sort() {
+            assert_eq!(
+                merge_sort(&mut [29, 10, 14, 30, 37, 14, 18]),
+                [10, 14, 14, 18, 29, 30, 37]
+            );
+            assert_eq!(
+                merge_sort(&mut [-1, -2, 1, 0]),
+                [-2, -1, 0, 1]
+            );
+            assert_eq!(merge_sort(&mut []), []);
+            assert_eq!(merge_sort(&mut [1, 1, 1, 2, 1]), [1, 1, 1, 1, 2]);
+            assert_eq!(merge_sort(&mut [2, 1, 1, 1, 2]), [1, 1, 1, 2, 2]);
+            assert_eq!(merge_sort(&mut [1]), [1]);
+        }
+
     }
 }
