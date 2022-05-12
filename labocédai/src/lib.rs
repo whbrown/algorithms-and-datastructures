@@ -208,5 +208,20 @@ mod tests {
             assert_eq!(merge_sort(&mut [1]), [1]);
         }
 
+        #[test]
+        fn test_quick_sort() {
+            assert_eq!(
+                quick_sort(&mut [29, 10, 14, 30, 37, 14, 18]),
+                [10, 14, 14, 18, 29, 30, 37]
+            );
+            assert_eq!(
+                quick_sort(&mut [-1, -2, 1, 0]),
+                [-2, -1, 0, 1]
+            );
+            assert_eq!(quick_sort(&mut []), []);
+            assert_eq!(quick_sort(&mut [1, 1, 1, 2, 1]), [1, 1, 1, 1, 2]);
+            assert_eq!(quick_sort(&mut [2, 1, 1, 1, 2]), [1, 1, 1, 2, 2]);
+            assert_eq!(quick_sort(&mut [1]), [1]);
+        }
     }
 }

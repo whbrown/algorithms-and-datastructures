@@ -78,3 +78,37 @@ pub fn merge_sort(nums: &[isize]) -> Vec<isize> {
     let right = merge_sort(&nums[midpoint..]);
     merge(&left, &right)
 }
+
+fn pivot_helper(nums: &mut [isize], start: usize, end: usize) -> usize {
+    /* selects a pivot and arranges all nums less than it to the left of it,
+    and greater than it to the right of it */
+    let pivot_idx = start;
+    let mut offset = start;
+    for i in start+1..=end {
+        if nums[i] < nums[pivot_idx] {
+            offset += 1;
+            nums.swap(i, offset);
+        }
+    }
+    nums.swap(pivot_idx, offset);
+    offset
+}
+
+pub fn quick_sort(nums: &mut [isize]) -> &mut [isize] {
+    fn sort(nums: &mut [isize], left: usize, right: usize) -> &mut [isize] {
+        if left < right  {
+            let pivot_idx = pivot_helper(nums, left, right);
+            // left
+            if pivot_idx > 0 {
+                sort(nums, left, pivot_idx - 1);
+            }
+            // right
+            sort(nums, pivot_idx+1, right);
+        }
+        nums
+    }
+    if nums.len() > 0 {
+        sort(nums, 0, nums.len() - 1);
+    }
+    nums
+}
